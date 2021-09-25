@@ -83,6 +83,8 @@ function deselectNode() {
   }
 }
 
+document.getElementById("CLEAR_ALL").onclick = () => { nodeArray = [] }
+
 subscribe(EVENT_TYPE.UP_LEFT, createNode)
 subscribe(EVENT_TYPE.UP_LEFT, deselectNode)
 subscribe(EVENT_TYPE.MOVE, whichNodeIsMouseHoveringOver)
