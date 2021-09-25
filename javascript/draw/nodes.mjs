@@ -1,62 +1,14 @@
-import Node from "../classes/Node.mjs"
-import { canvas, context, zoom, centre, mouse } from "./world.mjs"
-import { subscribe, hasMovedSinceDown, EVENT_TYPE } from "../events/mouse.mjs"
+import Node, { isMouseInCircle } from "../classes/Node.mjs"
 import { GRID_STEP } from "../settings/application.mjs"
-import { SHAPE } from "../settings/user.mjs"
+import { canvas, context, zoom, mouse } from "./world.mjs"
+import { subscribe, hasMovedSinceDown, EVENT_TYPE } from "../events/mouse.mjs"
 import moveArrow from "./shapes/moveArrow.mjs"
 
 export let hoveringOverNode = null
 export let selectedNode = null
 
-const NODE_RADIUS = GRID_STEP * 0.5
-const NODE_OUTLINE_WIDTH = 5
-
 let nodeArray = []
 
-function isPointInCircle(pointX, pointY, circleX, circleY, circleRadius) {
-  const distanceSquared = (pointX - circleX) * (pointX - circleX) + (pointY - circleY) * (pointY - circleY)
-  return distanceSquared <= circleRadius * circleRadius
-}
-
-function isMouseInCircle(circleX, circleY, circleRadius) {
-  return isPointInCircle(mouse.x, mouse.y, circleX, circleY, circleRadius)
-}
-
-function isPointInRect(pointX, pointY, rectX, rectY, rectSize) {
-  return pointX >= rectX && pointX <= rectX + rectSize && pointY >= rectY && pointY <= rectY + rectSize
-}
-
-function isMouseInSquare(rectX, rectY, reactSize) {
-  return isPointInRect(mouse.x, mouse.y, rectX, rectY, reactSize)
-}
-
-function isMouseInNode(node) {
-  switch (SHAPE) {
-    case "circle":
-      return isMouseInCircle((node.x + NODE_RADIUS) * zoom, (node.y + NODE_RADIUS) * zoom, NODE_RADIUS * zoom)
-    case "square":
-    default:
-      return isMouseInSquare(node.x * zoom, node.y * zoom, NODE_RADIUS * 2 * zoom)
-  }
-}
-
-function drawNode(node) {
-  context.beginPath()
-  switch (SHAPE) {
-    case "circle":
-      context.arc((node.x + NODE_RADIUS) * zoom + centre.x, (node.y + NODE_RADIUS) * zoom + centre.y, NODE_RADIUS * zoom, 0, 2 * Math.PI, false)
-      break
-    case "square":
-    default:
-      context.rect(node.x * zoom + centre.x, node.y * zoom + centre.y, NODE_RADIUS * 2 * zoom, NODE_RADIUS * 2 * zoom)
-      break
-  }
-  context.fillStyle = nodeIsHighlighted(node) ? 'white' : node.fill
-  context.fill()
-  context.lineWidth = NODE_OUTLINE_WIDTH * zoom
-  context.strokeStyle = nodeIsHighlighted(node) ? 'black' : node.outline
-  context.stroke()
-}
 
 // eslint-disable-next-line no-unused-vars
 function drawMove(x, y) {
@@ -87,16 +39,9 @@ function isHoveringOverAction() {
 }
 
 export function draw() {
-  context.font = `${NODE_RADIUS * zoom}px Arial`
-  context.textAlign = "center"
   nodeArray.forEach(node => {
-    drawNode(node)
+    node.draw()
   })
-}
-
-function nodeIsHighlighted(node) {
-  return node === hoveringOverNode
-    || node === selectedNode
 }
 
 function snapNodePosition(x, y) {
@@ -106,8 +51,8 @@ function snapNodePosition(x, y) {
 }
 
 function createNode() {
+  const [x, y] = snapNodePosition(mouse.x, mouse.y)
   if (!selectedNode && !hoveringOverNode && !hasMovedSinceDown) {
-    const [x, y] = snapNodePosition(mouse.x, mouse.y)
     nodeArray.push(new Node(x, y))
   }
 }
@@ -116,7 +61,7 @@ let hasMouseLeftNode = false
 function whichNodeIsMouseHoveringOver() {
   hoveringOverNode = null
   nodeArray.forEach(node => {
-    if (isMouseInNode(node) && !selectedNode) {
+    if (node.isMouseInside() && !selectedNode) {
       canvas.style.cursor = 'pointer'
       hoveringOverNode = node
     }
