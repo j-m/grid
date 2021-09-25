@@ -1,6 +1,6 @@
-import { context, centre, zoom } from "./world.mjs"
+import { CANVAS_WIDTH, CANVAS_HEIGHT, context, centre, zoom } from "./world.mjs"
 import { subscribe, EVENT_TYPE, x as mouseX, y as mouseY } from "../events/mouse.mjs"
-import { CANVAS_WIDTH, CANVAS_HEIGHT, GRID_STEP } from "../settings/application.mjs"
+import { GRID_STEP } from "../settings/application.mjs"
 import { SHOW_CENTRE } from "../settings/user.mjs"
 
 function drawVerticalLines() {

@@ -1,18 +1,14 @@
 import { subscribe, EVENT_TYPE, x as mouseX, y as mouseY } from "../events/mouse.mjs"
-import { CANVAS_WIDTH, CANVAS_HEIGHT, ZOOM_STEP } from "../settings/application.mjs"
+import { ZOOM_STEP } from "../settings/application.mjs"
 import { draw as gridDraw } from "./grid.mjs"
 import { draw as nodesDraw } from "./nodes.mjs"
 
 export let canvas
 export let context
 export let zoom = 1
+export let CANVAS_WIDTH = 1200
+export let CANVAS_HEIGHT = 800
 export let centre = { x: CANVAS_WIDTH / 2, y: CANVAS_HEIGHT / 2 }
-
-export function initialise() {
-  canvas = document.querySelector('canvas')
-  context = canvas.getContext('2d')
-  draw()
-}
 
 export function draw() {
   requestAnimationFrame(draw)
@@ -44,6 +40,26 @@ export function onMouseMove() {
   mouse.x = Math.round((mouseX - centre.x) / zoom)
   mouse.y = Math.round((mouseY - centre.y) / zoom)
 }
+
+function resizeCanvas() {
+  if (!canvas) { return }
+  canvas.width = window.innerWidth
+  canvas.height = window.innerHeight
+  CANVAS_WIDTH = canvas.width
+  CANVAS_HEIGHT = canvas.height
+  centre = { x: CANVAS_WIDTH / 2, y: CANVAS_HEIGHT / 2 }
+  draw()
+}
+resizeCanvas()
+
+export function initialise() {
+  canvas = document.querySelector('canvas')
+  context = canvas.getContext('2d')
+  resizeCanvas()
+  draw()
+}
+
+window.addEventListener('resize', resizeCanvas, false)
 
 subscribe(EVENT_TYPE.SCROLL_IN, zoomIn)
 subscribe(EVENT_TYPE.SCROLL_OUT, zoomOut)
