@@ -1,14 +1,10 @@
 import Node, { isMouseInCircle } from "../classes/Node.mjs"
 import { GRID_STEP } from "../settings/application.mjs"
 import { canvas, context, zoom, mouse } from "./world.mjs"
-import { subscribe, hasMovedSinceDown, EVENT } from "../events/mouse.mjs"
+import { subscribe, EVENT } from "../events/mouse.mjs"
 import moveArrow from "./shapes/moveArrow.mjs"
 
-export let hoveringOverNode = null
-export let selectedNode = null
-
 let nodeArray = []
-
 
 // eslint-disable-next-line no-unused-vars
 function drawMove(x, y) {
@@ -52,36 +48,30 @@ function snapNodePosition(x, y) {
 
 function createNode() {
   const [x, y] = snapNodePosition(mouse.x, mouse.y)
-  if (!selectedNode && !hoveringOverNode && !hasMovedSinceDown && !nodeArray.some(node => node.x === x && node.y === y)) {
+  if (!nodeArray.some(node => node.x === x && node.y === y)) {
     nodeArray.push(new Node(x, y))
   }
 }
 
-let hasMouseLeftNode = false
-
 function whichNodeIsMouseHoveringOver() {
-  hoveringOverNode = null
   nodeArray.forEach(node => {
-    if (node.isMouseInside() && !selectedNode) {
+    node.isMouseHovering = node.isMouseInside()
+    if (node.isMouseHovering) {
       canvas.style.cursor = 'pointer'
-      hoveringOverNode = node
     }
   })
-  if (!hasMouseLeftNode && !hoveringOverNode) {
-    hasMouseLeftNode = true
-  }
 }
 
 function selectNode() {
-  if (hoveringOverNode && !hasMouseLeftNode && !selectedNode) {
-    selectedNode = hoveringOverNode
-  }
+  nodeArray.forEach(node => {
+    node.isSelected = node.isMouseHovering
+  })
 }
 
 function deselectNode() {
-  if (!hoveringOverNode) {
-    selectedNode = null
-  }
+  nodeArray.forEach(node => {
+    node.isSelected = false
+  })
 }
 
 document.getElementById("CLEAR_ALL").onclick = () => { nodeArray = [] }

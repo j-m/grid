@@ -1,6 +1,7 @@
 import { GRID_STEP } from "../settings/application.mjs"
 import { SHAPE } from "../settings/user.mjs"
-import { context, zoom, centre, mouse } from "../draw/world.mjs"
+import { context, zoom, centre } from "../draw/world.mjs"
+import { x as mouseX, y as mouseY } from "../events/mouse.mjs"
 
 const NODE_OUTLINE_WIDTH = 5
 const NODE_RADIUS = GRID_STEP * 0.5
@@ -17,11 +18,11 @@ export function isPointInRect(pointX, pointY, rectX, rectY, rectSize) {
 }
 
 export function isMouseInCircle(circleX, circleY, circleRadius) {
-  return isPointInCircle(mouse.x, mouse.y, circleX, circleY, circleRadius)
+  return isPointInCircle(mouseX, mouseY, circleX, circleY, circleRadius)
 }
 
 export function isMouseInSquare(rectX, rectY, reactSize) {
-  return isPointInRect(mouse.x, mouse.y, rectX, rectY, reactSize)
+  return isPointInRect(mouseX, mouseY, rectX, rectY, reactSize)
 }
 
 export default class Node {
@@ -31,34 +32,47 @@ export default class Node {
     this.y = y
     this.fill = "black"
     this.outline = "black"
-    this.highlighted = false
+    this.isMouseHovering = false
+    this.isSelected = false
+  }
+
+  get absolute() {
+    switch (SHAPE) {
+      case "circle":
+        return { x: (this.x + NODE_RADIUS) * zoom + centre.x, y: (this.y + NODE_RADIUS) * zoom + centre.y, size: NODE_RADIUS * zoom }
+      case "square":
+      default:
+        return { x: this.x * zoom + centre.x, y: this.y * zoom + centre.y, size: NODE_RADIUS * zoom * 2 }
+    }
   }
 
   isMouseInside() {
+    const bounds = this.absolute
     switch (SHAPE) {
       case "circle":
-        return isMouseInCircle((this.x + NODE_RADIUS) * zoom, (this.y + NODE_RADIUS) * zoom, NODE_RADIUS * zoom)
+        return isMouseInCircle(bounds.x, bounds.y, bounds.size)
       case "square":
       default:
-        return isMouseInSquare(this.x * zoom, this.y * zoom, NODE_RADIUS * 2 * zoom)
+        return isMouseInSquare(bounds.x, bounds.y, bounds.size)
     }
   }
 
   draw() {
     context.beginPath()
+    const bounds = this.absolute
     switch (SHAPE) {
       case "circle":
-        context.arc((this.x + NODE_RADIUS) * zoom + centre.x, (this.y + NODE_RADIUS) * zoom + centre.y, NODE_RADIUS * zoom, 0, 2 * Math.PI, false)
+        context.arc(bounds.x, bounds.y, bounds.size, 0, 2 * Math.PI, false)
         break
       case "square":
       default:
-        context.rect(this.x * zoom + centre.x, this.y * zoom + centre.y, NODE_RADIUS * 2 * zoom, NODE_RADIUS * 2 * zoom)
+        context.rect(bounds.x, bounds.y, bounds.size, bounds.size)
         break
     }
-    context.fillStyle = this.highlighted ? 'white' : this.fill
+    context.fillStyle = this.isMouseHovering || this.isSelected ? 'white' : this.fill
     context.fill()
     context.lineWidth = NODE_OUTLINE_WIDTH * zoom
-    context.strokeStyle = this.highlighted ? 'black' : this.outline
+    context.strokeStyle = this.isMouseHovering || this.isSelected ? 'black' : this.outline
     context.stroke()
   }
 
