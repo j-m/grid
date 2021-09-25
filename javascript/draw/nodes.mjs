@@ -52,7 +52,7 @@ function snapNodePosition(x, y) {
 
 function createNode() {
   const [x, y] = snapNodePosition(mouse.x, mouse.y)
-  if (!selectedNode && !hoveringOverNode && !hasMovedSinceDown) {
+  if (!selectedNode && !hoveringOverNode && !hasMovedSinceDown && !nodeArray.some(node => node.x === x && node.y === y)) {
     nodeArray.push(new Node(x, y))
   }
 }
