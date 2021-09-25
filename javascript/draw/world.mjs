@@ -1,4 +1,4 @@
-import { subscribe, EVENT_TYPE, x as mouseX, y as mouseY } from "../events/mouse.mjs"
+import { subscribe, EVENT, x as mouseX, y as mouseY } from "../events/mouse.mjs"
 import { ZOOM_STEP } from "../settings/application.mjs"
 import { draw as gridDraw } from "./grid.mjs"
 import { draw as nodesDraw } from "./nodes.mjs"
@@ -61,6 +61,6 @@ export function initialise() {
 
 window.addEventListener('resize', resizeCanvas, false)
 
-subscribe(EVENT_TYPE.SCROLL_IN, zoomIn)
-subscribe(EVENT_TYPE.SCROLL_OUT, zoomOut)
-subscribe(EVENT_TYPE.MOVE, onMouseMove)
+subscribe(EVENT.MOUSE_SCROLL_IN, zoomIn)
+subscribe(EVENT.MOUSE_SCROLL_OUT, zoomOut)
+subscribe(EVENT.MOUSE_MOVE, onMouseMove)

@@ -1,7 +1,7 @@
 import Node, { isMouseInCircle } from "../classes/Node.mjs"
 import { GRID_STEP } from "../settings/application.mjs"
 import { canvas, context, zoom, mouse } from "./world.mjs"
-import { subscribe, hasMovedSinceDown, EVENT_TYPE } from "../events/mouse.mjs"
+import { subscribe, hasMovedSinceDown, EVENT } from "../events/mouse.mjs"
 import moveArrow from "./shapes/moveArrow.mjs"
 
 export let hoveringOverNode = null
@@ -58,6 +58,7 @@ function createNode() {
 }
 
 let hasMouseLeftNode = false
+
 function whichNodeIsMouseHoveringOver() {
   hoveringOverNode = null
   nodeArray.forEach(node => {
@@ -85,8 +86,8 @@ function deselectNode() {
 
 document.getElementById("CLEAR_ALL").onclick = () => { nodeArray = [] }
 
-subscribe(EVENT_TYPE.UP_LEFT, createNode)
-subscribe(EVENT_TYPE.UP_LEFT, deselectNode)
-subscribe(EVENT_TYPE.MOVE, whichNodeIsMouseHoveringOver)
-subscribe(EVENT_TYPE.MOVE, isHoveringOverAction)
-subscribe(EVENT_TYPE.UP_LEFT, selectNode)
+subscribe(EVENT.MOUSE_UP_LEFT, createNode)
+subscribe(EVENT.MOUSE_UP_LEFT, deselectNode)
+subscribe(EVENT.MOUSE_MOVE, whichNodeIsMouseHoveringOver)
+subscribe(EVENT.MOUSE_MOVE, isHoveringOverAction)
+subscribe(EVENT.MOUSE_UP_LEFT, selectNode)

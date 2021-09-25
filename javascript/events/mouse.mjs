@@ -1,21 +1,21 @@
 import { canvas } from "../draw/world.mjs"
 import { INVERT_SCROLL } from "../settings/user.mjs"
 
-export let EVENT_TYPE = {
-  MOVE: "move",
-  DOWN: "down",
-  DOWN_LEFT: "downLeft",
-  DOWN_MIDDLE: "downMiddle",
-  DOWN_RIGHT: "downRight",
-  DOWN_OTHER: "downOther",
-  UP: "up",
-  UP_LEFT: "upLeft",
-  UP_MIDDLE: "upMiddle",
-  UP_RIGHT: "upRight",
-  UP_OTHER: "upOther",
-  SCROLL: "scroll",
-  SCROLL_IN: "scrollIn",
-  SCROLL_OUT: "scrollOut"
+export let EVENT = {
+  MOUSE_MOVE: "mouseMove",
+  MOUSE_DOWN: "mouseDown",
+  MOUSE_DOWN_LEFT: "mouseDownLeft",
+  MOUSE_DOWN_MIDDLE: "mouseDownMiddle",
+  MOUSE_DOWN_RIGHT: "mouseDownRight",
+  MOUSE_DOWN_OTHER: "mouseDownOther",
+  MOUSE_UP: "mouseUp",
+  MOUSE_UP_LEFT: "mouseUpLeft",
+  MOUSE_UP_MIDDLE: "mouseUpMiddle",
+  MOUSE_UP_RIGHT: "mouseUpRight",
+  MOUSE_UP_OTHER: "mouseUpOther",
+  MOUSE_SCROLL: "mouseScroll",
+  MOUSE_SCROLL_IN: "mouseScrollIn",
+  MOUSE_SCROLL_OUT: "mouseScrollOut"
 }
 
 export let x = 0
@@ -23,20 +23,20 @@ export let y = 0
 export let hasMovedSinceDown = false
 
 export let subscriptions = {
-  move: [],
-  down: [],
-  downLeft: [],
-  downMiddle: [],
-  downRight: [],
-  downOther: [],
-  up: [],
-  upLeft: [],
-  upMiddle: [],
-  upRight: [],
-  upOther: [],
-  scroll: [],
-  scrollIn: [],
-  scrollOut: []
+  mouseMove: [],
+  mouseDown: [],
+  mouseDownLeft: [],
+  mouseDownMiddle: [],
+  mouseDownRight: [],
+  mouseDownOther: [],
+  mouseUp: [],
+  mouseUpLeft: [],
+  mouseUpMiddle: [],
+  mouseUpRight: [],
+  mouseUpOther: [],
+  mouseScroll: [],
+  mouseScrollIn: [],
+  mouseScrollOut: []
 }
 
 export function subscribe(type, func) {
@@ -48,11 +48,11 @@ export function subscribe(type, func) {
 }
 
 export function initialise() {
-  canvas.onmousedown = down
-  canvas.onmousemove = move
-  canvas.onmouseup = up
-  canvas.onwheel = scroll
-  canvas.oncontextmenu = contextMenu
+  canvas.onmousedown = mouseDown
+  canvas.onmousemove = mouseMove
+  canvas.onmouseup = mouseUp
+  canvas.onwheel = mouseScroll
+  canvas.oncontextmenu = mouseContextMenu
 }
 
 function trigger(type) {
@@ -65,14 +65,14 @@ function trigger(type) {
   }
 }
 
-function contextMenu(event) {
-  move(event)
+function mouseContextMenu(event) {
+  mouseMove(event)
   event.preventDefault()
   event.stopPropagation()
   return false
 }
 
-function move(event) {
+function mouseMove(event) {
   event.preventDefault()
   event.stopPropagation()
   canvas.style.cursor = 'default'
@@ -83,60 +83,60 @@ function move(event) {
   }
   x = event.x - canvasRect.x
   y = event.y - canvasRect.y
-  trigger(EVENT_TYPE.MOVE)
+  trigger(EVENT.MOUSE_MOVE)
 }
 
-function down(event) {
+function mouseDown(event) {
   event.preventDefault()
   event.stopPropagation()
   hasMovedSinceDown = false
   switch (event.which) {
     case 1:
-      trigger(EVENT_TYPE.DOWN_LEFT)
+      trigger(EVENT.MOUSE_DOWN_LEFT)
       break
     case 2:
-      trigger(EVENT_TYPE.DOWN_MIDDLE)
+      trigger(EVENT.MOUSE_DOWN_MIDDLE)
       break
     case 3:
-      trigger(EVENT_TYPE.DOWN_RIGHT)
+      trigger(EVENT.MOUSE_DOWN_RIGHT)
       break
     default:
-      trigger(EVENT_TYPE.DOWN_OTHER)
+      trigger(EVENT.MOUSE_DOWN_OTHER)
   }
-  trigger(EVENT_TYPE.DOWN)
-  move(event)
+  trigger(EVENT.MOUSE_DOWN)
+  mouseMove(event)
 }
 
-function up(event) {
+function mouseUp(event) {
   event.preventDefault()
   event.stopPropagation()
   switch (event.which) {
     case 1:
-      trigger(EVENT_TYPE.UP_LEFT)
+      trigger(EVENT.MOUSE_UP_LEFT)
       break
     case 2:
-      trigger(EVENT_TYPE.UP_MIDDLE)
+      trigger(EVENT.MOUSE_UP_MIDDLE)
       break
     case 3:
-      trigger(EVENT_TYPE.UP_RIGHT)
+      trigger(EVENT.MOUSE_UP_RIGHT)
       break
     default:
-      trigger(EVENT_TYPE.UP_OTHER)
+      trigger(EVENT.MOUSE_UP_OTHER)
   }
-  trigger(EVENT_TYPE.UP)
-  move(event)
+  trigger(EVENT.MOUSE_UP)
+  mouseMove(event)
 }
 
-function scroll(event) {
+function mouseScroll(event) {
   event.preventDefault()
   event.stopPropagation()
   hasMovedSinceDown = true
   if (event.deltaY < 0) {
-    trigger(INVERT_SCROLL ? EVENT_TYPE.SCROLL_OUT : EVENT_TYPE.SCROLL_IN)
+    trigger(INVERT_SCROLL ? EVENT.MOUSE_SCROLL_OUT : EVENT.MOUSE_SCROLL_IN)
   }
   if (event.deltaY > 0) {
-    trigger(INVERT_SCROLL ? EVENT_TYPE.SCROLL_IN : EVENT_TYPE.SCROLL_OUT)
+    trigger(INVERT_SCROLL ? EVENT.MOUSE_SCROLL_IN : EVENT.MOUSE_SCROLL_OUT)
   }
-  trigger(EVENT_TYPE.SCROLL)
-  move(event)
+  trigger(EVENT.MOUSE_SCROLL)
+  mouseMove(event)
 }
