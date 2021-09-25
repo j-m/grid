@@ -2,6 +2,7 @@ import Node from "../classes/Node.mjs"
 import { canvas, context, zoom, centre, mouse } from "./world.mjs"
 import { subscribe, hasMovedSinceDown, EVENT_TYPE } from "../events/mouse.mjs"
 import { GRID_STEP } from "../settings/application.mjs"
+import { SHAPE } from "../settings/user.mjs"
 import moveArrow from "./shapes/moveArrow.mjs"
 
 export let hoveringOverNode = null
@@ -30,7 +31,7 @@ function isMouseInSquare(rectX, rectY, reactSize) {
 }
 
 function isMouseInNode(node) {
-  switch (node.shape) {
+  switch (SHAPE) {
     case "circle":
       return isMouseInCircle((node.x + NODE_RADIUS) * zoom, (node.y + NODE_RADIUS) * zoom, NODE_RADIUS * zoom)
     case "square":
@@ -41,7 +42,7 @@ function isMouseInNode(node) {
 
 function drawNode(node) {
   context.beginPath()
-  switch (node.shape) {
+  switch (SHAPE) {
     case "circle":
       context.arc((node.x + NODE_RADIUS) * zoom + centre.x, (node.y + NODE_RADIUS) * zoom + centre.y, NODE_RADIUS * zoom, 0, 2 * Math.PI, false)
       break

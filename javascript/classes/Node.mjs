@@ -5,7 +5,6 @@ export default class Node {
     this.id = id++
     this.x = x
     this.y = y
-    this.shape = "square"
     this.fill = "black"
     this.outline = "black"
   }
