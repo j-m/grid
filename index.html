@@ -11,16 +11,26 @@
         <h2>Settings</h2>
         <label for="INVERT_SCROLL"><input type="checkbox" id="INVERT_SCROLL" name="INVERT_SCROLL"/>Invert scroll</label>
         <label for="SHOW_CENTRE"><input type="checkbox" id="SHOW_CENTRE" name="SHOW_CENTRE"/>Show map centre</label>
-        <br/>
-        <label for="SHAPE">Default node shape:</label>
-        <select name="SHAPE" id="SHAPE">
-          <option value="Square">Square</option>
-          <option value="circle">Circle</option>
-        </select>
+      </fieldset>
+      <hr/>
+      <fieldset id="style">
+        <h2>Style</h2>
+
+        <label for="SHAPE">Shape
+          <select name="SHAPE" id="SHAPE">
+            <option value="square">Square</option>
+            <option value="circle">Circle</option>
+          </select>
+        </label>
+        <label for="FILL">Fill<input type="color" id="FILL" name="FILL" value="black"></label>
+        <label for="SIZE">Size<input type="range" id="SIZE" name="SIZE" min="1" max="100" value="100"></label>
+        <label for="OUTLINE">Outline<input type="color" id="OUTLINE" name="OUTLINE" value="black"></label>
+        <label for="THICKNESS">Thickness<input type="range" id="THICKNESS" name="THICKNESS" min="0" max="50" value="0"></label>
       </fieldset>
       <hr/>
       <fieldset id="actions">
         <h2>Actions</h2>
+        <button id="CONVERT_ALL">Style all nodes</button>
         <button id="CLEAR_ALL">Clear all nodes</button>
       </fieldset> 
     </div>

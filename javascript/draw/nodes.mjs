@@ -1,4 +1,4 @@
-import Node from "../classes/Node.mjs"
+import Node, { currentStyle } from "../classes/Node.mjs"
 import { GRID_STEP } from "../settings/application.mjs"
 import { mouse } from "./world.mjs"
 import { subscribe, EVENT } from "../events/mouse.mjs"
@@ -29,6 +29,7 @@ function createNode() {
   }
 }
 
+document.getElementById("CONVERT_ALL").onclick = () => { nodeArray.forEach(node => { node.style = currentStyle() }) }
 document.getElementById("CLEAR_ALL").onclick = () => { nodeArray = [] }
 
 subscribe(EVENT.MOUSE_MOVE, createNode)

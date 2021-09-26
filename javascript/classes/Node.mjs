@@ -1,61 +1,52 @@
 import { GRID_STEP } from "../settings/application.mjs"
-import { SHAPE } from "../settings/user.mjs"
+import { SHAPE, FILL, SIZE, OUTLINE, THICKNESS } from "../settings/style.mjs"
 import { canvas, context } from "../window.mjs"
 import { zoom } from "../draw/world.mjs"
-import { isMouseInCircle, isMouseInSquare } from "../events/mouse.mjs"
 
-const NODE_OUTLINE_WIDTH = 5
-const NODE_RADIUS = GRID_STEP * 0.5
-
-let id = 0
+export function currentStyle() {
+  return {
+    shape: SHAPE,
+    fill: FILL,
+    size: GRID_STEP * 0.5 * SIZE / 100,
+    outline: OUTLINE,
+    thickness: THICKNESS
+  }
+}
 
 export default class Node {
   constructor(x, y) {
-    this.id = id++
     this.x = x
     this.y = y
-    this.fill = "black"
-    this.outline = "black"
+    this.style = currentStyle()
   }
 
   get absolute() {
-    switch (SHAPE) {
-      case "circle":
-        return { x: (this.x + NODE_RADIUS) * zoom + canvas.centre.x, y: (this.y + NODE_RADIUS) * zoom + canvas.centre.y, size: NODE_RADIUS * zoom }
-      case "square":
-      default:
-        return { x: this.x * zoom + canvas.centre.x, y: this.y * zoom + canvas.centre.y, size: NODE_RADIUS * zoom * 2 }
-    }
-  }
-
-  isMouseInside() {
-    const bounds = this.absolute
-    switch (SHAPE) {
-      case "circle":
-        return isMouseInCircle(bounds.x, bounds.y, bounds.size)
-      case "square":
-      default:
-        return isMouseInSquare(bounds.x, bounds.y, bounds.size)
+    return {
+      x: (this.x + this.style.size) * zoom + canvas.centre.x,
+      y: (this.y + this.style.size) * zoom + canvas.centre.y,
+      size: this.style.size * zoom
     }
   }
 
   draw() {
     context.beginPath()
     const bounds = this.absolute
-    switch (SHAPE) {
+    switch (this.style.shape) {
       case "circle":
         context.arc(bounds.x, bounds.y, bounds.size, 0, 2 * Math.PI, false)
         break
       case "square":
       default:
-        context.rect(bounds.x, bounds.y, bounds.size, bounds.size)
+        context.rect(bounds.x - bounds.size, bounds.y - bounds.size, bounds.size * 2, bounds.size * 2)
         break
     }
-    context.fillStyle = this.fill
+    context.fillStyle = this.style.fill
     context.fill()
-    context.lineWidth = NODE_OUTLINE_WIDTH * zoom
-    context.strokeStyle = this.outline
-    context.stroke()
+    if (this.style.thickness > 0) {
+      context.lineWidth = this.style.thickness * zoom
+      context.strokeStyle = this.style.outline
+      context.stroke()
+    }
   }
 
 }
