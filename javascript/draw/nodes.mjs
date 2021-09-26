@@ -1,6 +1,7 @@
 import Node, { isMouseInCircle } from "../classes/Node.mjs"
 import { GRID_STEP } from "../settings/application.mjs"
-import { canvas, context, zoom, mouse } from "./world.mjs"
+import { zoom, mouse } from "./world.mjs"
+import { canvas, context } from "../window.mjs"
 import { subscribe, EVENT } from "../events/mouse.mjs"
 import moveArrow from "./shapes/moveArrow.mjs"
 

@@ -1,6 +1,7 @@
 import { GRID_STEP } from "../settings/application.mjs"
 import { SHAPE } from "../settings/user.mjs"
-import { context, zoom, centre } from "../draw/world.mjs"
+import { canvas, context } from "../window.mjs"
+import { zoom } from "../draw/world.mjs"
 import { x as mouseX, y as mouseY } from "../events/mouse.mjs"
 
 const NODE_OUTLINE_WIDTH = 5
@@ -39,10 +40,10 @@ export default class Node {
   get absolute() {
     switch (SHAPE) {
       case "circle":
-        return { x: (this.x + NODE_RADIUS) * zoom + centre.x, y: (this.y + NODE_RADIUS) * zoom + centre.y, size: NODE_RADIUS * zoom }
+        return { x: (this.x + NODE_RADIUS) * zoom + canvas.centre.x, y: (this.y + NODE_RADIUS) * zoom + canvas.centre.y, size: NODE_RADIUS * zoom }
       case "square":
       default:
-        return { x: this.x * zoom + centre.x, y: this.y * zoom + centre.y, size: NODE_RADIUS * zoom * 2 }
+        return { x: this.x * zoom + canvas.centre.x, y: this.y * zoom + canvas.centre.y, size: NODE_RADIUS * zoom * 2 }
     }
   }
 

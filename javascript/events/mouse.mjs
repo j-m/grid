@@ -1,4 +1,4 @@
-import { canvas } from "../draw/world.mjs"
+import { canvas } from "../window.mjs"
 import { INVERT_SCROLL } from "../settings/user.mjs"
 
 export let EVENT = {

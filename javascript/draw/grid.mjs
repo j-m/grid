@@ -1,27 +1,28 @@
-import { CANVAS_WIDTH, CANVAS_HEIGHT, context, centre, zoom } from "./world.mjs"
+import { canvas, context } from "../window.mjs"
+import { zoom } from "./world.mjs"
 import { subscribe, EVENT, x as mouseX, y as mouseY } from "../events/mouse.mjs"
 import { GRID_STEP } from "../settings/application.mjs"
 import { SHOW_CENTRE } from "../settings/user.mjs"
 
 function drawVerticalLines() {
-  for (let x = centre.x; x > 0; x -= GRID_STEP * zoom) {
+  for (let x = canvas.centre.x; x > 0; x -= GRID_STEP * zoom) {
     context.moveTo(x, 0)
-    context.lineTo(x, CANVAS_HEIGHT)
+    context.lineTo(x, canvas.height)
   }
-  for (let x = centre.x + GRID_STEP * zoom; x < CANVAS_WIDTH; x += GRID_STEP * zoom) {
+  for (let x = canvas.centre.x + GRID_STEP * zoom; x < canvas.width; x += GRID_STEP * zoom) {
     context.moveTo(x, 0)
-    context.lineTo(x, CANVAS_HEIGHT)
+    context.lineTo(x, canvas.height)
   }
 }
 
 function drawHorizontalLines() {
-  for (let y = centre.y; y > 0; y -= GRID_STEP * zoom) {
+  for (let y = canvas.centre.y; y > 0; y -= GRID_STEP * zoom) {
     context.moveTo(0, y)
-    context.lineTo(CANVAS_WIDTH, y)
+    context.lineTo(canvas.width, y)
   }
-  for (let y = centre.y + GRID_STEP * zoom; y < CANVAS_HEIGHT; y += GRID_STEP * zoom) {
+  for (let y = canvas.centre.y + GRID_STEP * zoom; y < canvas.height; y += GRID_STEP * zoom) {
     context.moveTo(0, y)
-    context.lineTo(CANVAS_WIDTH, y)
+    context.lineTo(canvas.width, y)
   }
 }
 
@@ -37,7 +38,7 @@ function drawLines() {
 
 function markCentre() {
   context.beginPath()
-  context.arc(centre.x, centre.y, 5 * zoom, 0, 2 * Math.PI, false)
+  context.arc(canvas.centre.x, canvas.centre.y, 5 * zoom, 0, 2 * Math.PI, false)
   context.fillStyle = 'red'
   context.fill()
   context.lineWidth = 1
@@ -64,14 +65,14 @@ export function startMoving() {
   if (shouldMove()) {
     dragging = true
     dragFrom = { x: mouseX, y: mouseY }
-    previousCentre = { x: centre.x, y: centre.y }
+    previousCentre = { x: canvas.centre.x, y: canvas.centre.y }
   }
 }
 
 export function move() {
   if (shouldMove() && dragging) {
-    centre.x = previousCentre.x + (mouseX - dragFrom.x) * zoom
-    centre.y = previousCentre.y + (mouseY - dragFrom.y) * zoom
+    canvas.centre.x = previousCentre.x + (mouseX - dragFrom.x) * zoom
+    canvas.centre.y = previousCentre.y + (mouseY - dragFrom.y) * zoom
   }
 }
 
