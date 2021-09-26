@@ -52,7 +52,6 @@ canvas {
 }
 
 #sidebar > fieldset > label,
-#sidebar > fieldset > input,
 #sidebar > fieldset > button,
 #sidebar > fieldset > select {
   display: block;
