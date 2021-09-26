@@ -1,5 +1,6 @@
 import Node, { currentStyle } from "../classes/Node.mjs"
 import { GRID_STEP } from "../settings/application.mjs"
+import { OVERWRITE_NODES } from "../settings/user.mjs"
 import { mouse, zoom } from "./world.mjs"
 import { subscribe, EVENT } from "../events/mouse.mjs"
 import { canvas } from "../window.mjs"
@@ -31,7 +32,11 @@ function createNode() {
     return
   }
   const [x, y] = snapNodePosition(mouse.x, mouse.y)
-  if (!nodeArray.some(node => node.x === x && node.y === y)) {
+  const index = nodeArray.findIndex(node => node.x === x && node.y === y)
+  if (OVERWRITE_NODES === true && index !== -1) {
+    nodeArray.splice(index, 1)
+  }
+  if (OVERWRITE_NODES === true || OVERWRITE_NODES === false && index === -1) {
     nodeArray.push(new Node(x, y))
   }
 }
