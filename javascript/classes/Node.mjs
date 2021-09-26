@@ -43,6 +43,14 @@ export default class Node {
         context.lineTo(x + size, y + size)
         context.lineTo(x, y - size)
         break
+      case "hexagon":
+        context.moveTo(x - size, y)
+        context.lineTo(x - size / 2, y - size)
+        context.lineTo(x + size / 2, y - size)
+        context.lineTo(x + size, y)
+        context.lineTo(x + size / 2, y + size)
+        context.lineTo(x - size / 2, y + size)
+        break
       case "square":
       default:
         context.rect(x - size, y - size, size * 2, size * 2)
