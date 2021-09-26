@@ -80,6 +80,6 @@ export function stopMoving() {
   dragging = false
 }
 
-subscribe(EVENT.MOUSE_DOWN_LEFT, startMoving)
+subscribe(EVENT.MOUSE_DOWN_RIGHT, startMoving)
 subscribe(EVENT.MOUSE_MOVE, move)
-subscribe(EVENT.MOUSE_UP_LEFT, stopMoving)
+subscribe(EVENT.MOUSE_UP_RIGHT, stopMoving)

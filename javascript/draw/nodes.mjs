@@ -1,7 +1,6 @@
 import Node from "../classes/Node.mjs"
 import { GRID_STEP } from "../settings/application.mjs"
 import { mouse } from "./world.mjs"
-import { canvas } from "../window.mjs"
 import { subscribe, EVENT } from "../events/mouse.mjs"
 
 let nodeArray = []
@@ -18,37 +17,20 @@ function snapNodePosition(x, y) {
   return [x, y]
 }
 
+export let drawing = false
+
 function createNode() {
+  if (!drawing) {
+    return
+  }
   const [x, y] = snapNodePosition(mouse.x, mouse.y)
   if (!nodeArray.some(node => node.x === x && node.y === y)) {
     nodeArray.push(new Node(x, y))
   }
 }
 
-function whichNodeIsMouseHoveringOver() {
-  nodeArray.forEach(node => {
-    node.isMouseHovering = node.isMouseInside()
-    if (node.isMouseHovering) {
-      canvas.style.cursor = 'pointer'
-    }
-  })
-}
-
-function selectNode() {
-  nodeArray.forEach(node => {
-    node.isSelected = node.isMouseHovering
-  })
-}
-
-function deselectNode() {
-  nodeArray.forEach(node => {
-    node.isSelected = false
-  })
-}
-
 document.getElementById("CLEAR_ALL").onclick = () => { nodeArray = [] }
 
-subscribe(EVENT.MOUSE_UP_LEFT, createNode)
-subscribe(EVENT.MOUSE_UP_LEFT, deselectNode)
-subscribe(EVENT.MOUSE_MOVE, whichNodeIsMouseHoveringOver)
-subscribe(EVENT.MOUSE_UP_LEFT, selectNode)
+subscribe(EVENT.MOUSE_MOVE, createNode)
+subscribe(EVENT.MOUSE_DOWN_LEFT, () => { drawing = true })
+subscribe(EVENT.MOUSE_UP_LEFT, () => { drawing = false })

@@ -16,8 +16,6 @@ export default class Node {
     this.y = y
     this.fill = "black"
     this.outline = "black"
-    this.isMouseHovering = false
-    this.isSelected = false
   }
 
   get absolute() {
@@ -53,10 +51,10 @@ export default class Node {
         context.rect(bounds.x, bounds.y, bounds.size, bounds.size)
         break
     }
-    context.fillStyle = this.isMouseHovering || this.isSelected ? 'white' : this.fill
+    context.fillStyle = this.fill
     context.fill()
     context.lineWidth = NODE_OUTLINE_WIDTH * zoom
-    context.strokeStyle = this.isMouseHovering || this.isSelected ? 'black' : this.outline
+    context.strokeStyle = this.outline
     context.stroke()
   }
 
