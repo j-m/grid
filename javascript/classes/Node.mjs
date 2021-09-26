@@ -29,18 +29,26 @@ export default class Node {
   }
 
   draw() {
+    let { x, y, size } = this.absolute
+    const offset = GRID_STEP / 2 * zoom - size
+    x += offset
+    y += offset
     context.beginPath()
-    const bounds = this.absolute
-    const sizeOffset = GRID_STEP / 2 * zoom - bounds.size
     switch (this.style.shape) {
       case "circle":
-        context.arc(bounds.x + sizeOffset, bounds.y + sizeOffset, bounds.size, 0, 2 * Math.PI, false)
+        context.arc(x, y, size, 0, 2 * Math.PI, false)
+        break
+      case "triangle":
+        context.moveTo(x - size, y + size)
+        context.lineTo(x + size, y + size)
+        context.lineTo(x, y - size)
         break
       case "square":
       default:
-        context.rect(bounds.x - bounds.size + sizeOffset, bounds.y - bounds.size + sizeOffset, bounds.size * 2, bounds.size * 2)
+        context.rect(x - size, y - size, size * 2, size * 2)
         break
     }
+    context.closePath()
     context.fillStyle = this.style.fill
     context.fill()
     if (this.style.thickness > 0) {
