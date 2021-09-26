@@ -37,8 +37,8 @@ function createNode() {
   }
 }
 
-document.getElementById("CONVERT_ALL").onclick = () => { Object.values(nodes).forEach(node => { node.style = currentStyle() }) }
-document.getElementById("CLEAR_ALL").onclick = () => { nodes = {} }
+document.getElementById("CONVERT_ALL").addEventListener("click", () => { Object.values(nodes).forEach(node => { node.style = currentStyle() }) }, { passive: true })
+document.getElementById("CLEAR_ALL").addEventListener("click", () => { nodes = {} }, { passive: true })
 
 subscribe(EVENT.MOUSE_MOVE, createNode)
 subscribe(EVENT.MOUSE_DOWN_LEFT, () => { drawing = true })

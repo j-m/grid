@@ -37,5 +37,5 @@ function initialise() {
   draw()
 }
 
-window.addEventListener('resize', resizeCanvas, false)
-window.onload = () => initialise()
+window.addEventListener('resize', resizeCanvas, { passive: true })
+window.addEventListener('load', initialise, { passive: false })

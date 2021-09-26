@@ -48,11 +48,11 @@ export function subscribe(type, func) {
 }
 
 export function initialise() {
-  canvas.onmousedown = mouseDown
-  canvas.onmousemove = mouseMove
-  canvas.onmouseup = mouseUp
-  canvas.onwheel = mouseScroll
-  canvas.oncontextmenu = mouseContextMenu
+  canvas.addEventListener('mousedown', mouseDown, { passive: true })
+  canvas.addEventListener('mousemove', mouseMove, { passive: true })
+  canvas.addEventListener('mouseup', mouseUp, { passive: true })
+  canvas.addEventListener('wheel', mouseScroll, { passive: true })
+  canvas.addEventListener('contextmenu', mouseContextMenu, { passive: false })
 }
 
 function trigger(type) {
@@ -73,8 +73,6 @@ function mouseContextMenu(event) {
 }
 
 function mouseMove(event) {
-  event.preventDefault()
-  event.stopPropagation()
   canvas.style.cursor = 'default'
   const canvasRect = canvas.getBoundingClientRect()
   if (x !== event.x - canvasRect.x
@@ -87,8 +85,6 @@ function mouseMove(event) {
 }
 
 function mouseDown(event) {
-  event.preventDefault()
-  event.stopPropagation()
   hasMovedSinceDown = false
   switch (event.which) {
     case 1:
@@ -108,8 +104,6 @@ function mouseDown(event) {
 }
 
 function mouseUp(event) {
-  event.preventDefault()
-  event.stopPropagation()
   switch (event.which) {
     case 1:
       trigger(EVENT.MOUSE_UP_LEFT)
@@ -128,8 +122,6 @@ function mouseUp(event) {
 }
 
 function mouseScroll(event) {
-  event.preventDefault()
-  event.stopPropagation()
   hasMovedSinceDown = true
   if (event.deltaY < 0) {
     trigger(INVERT_SCROLL ? EVENT.MOUSE_SCROLL_OUT : EVENT.MOUSE_SCROLL_IN)
