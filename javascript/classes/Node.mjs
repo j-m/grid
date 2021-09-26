@@ -9,7 +9,7 @@ export function currentStyle() {
     fill: FILL,
     size: SIZE / 100,
     outline: OUTLINE,
-    thickness: THICKNESS
+    thickness: THICKNESS / 100
   }
 }
 
@@ -21,11 +21,13 @@ export default class Node {
   }
 
   get absolute() {
+    const minStep = step.w < step.h ? step.w : step.h
+    const borderWidth = this.style.thickness * minStep * zoom
     return {
-      x: (this.x + step.w * 0.5 * this.style.size) * zoom + canvas.centre.x,
-      y: (this.y + step.h * 0.5 * this.style.size) * zoom + canvas.centre.y,
-      w: this.style.size * zoom * step.w * 0.5,
-      h: this.style.size * zoom * step.h * 0.5
+      x: (this.x + step.w * 0.5 * this.style.size) * zoom + canvas.centre.x - borderWidth / 2,
+      y: (this.y + step.h * 0.5 * this.style.size) * zoom + canvas.centre.y - borderWidth / 2,
+      w: this.style.size * zoom * step.w * 0.5 - borderWidth / 2,
+      h: this.style.size * zoom * step.h * 0.5 - borderWidth / 2
     }
   }
 
@@ -60,7 +62,9 @@ export default class Node {
     context.fillStyle = this.style.fill
     context.fill()
     if (this.style.thickness > 0) {
-      context.lineWidth = this.style.thickness * zoom
+      const minStep = step.w < step.h ? step.w : step.h
+      const borderWidth = this.style.thickness * minStep * zoom
+      context.lineWidth = borderWidth
       context.strokeStyle = this.style.outline
       context.stroke()
     }
