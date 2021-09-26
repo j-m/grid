@@ -1,13 +1,20 @@
 import Node, { currentStyle } from "../classes/Node.mjs"
 import { GRID_STEP } from "../settings/application.mjs"
-import { mouse } from "./world.mjs"
+import { mouse, zoom } from "./world.mjs"
 import { subscribe, EVENT } from "../events/mouse.mjs"
+import { canvas } from "../window.mjs"
 
 let nodeArray = []
 
 export function draw() {
+  const offset = GRID_STEP / 2 * zoom
   nodeArray.forEach(node => {
-    node.draw()
+    if (node.absolute.x > -offset
+      && node.absolute.x < canvas.width + offset
+      && node.absolute.y > -offset
+      && node.absolute.y < canvas.height + offset) {
+      node.draw()
+    }
   })
 }
 
