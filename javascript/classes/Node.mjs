@@ -2,29 +2,12 @@ import { GRID_STEP } from "../settings/application.mjs"
 import { SHAPE } from "../settings/user.mjs"
 import { canvas, context } from "../window.mjs"
 import { zoom } from "../draw/world.mjs"
-import { x as mouseX, y as mouseY } from "../events/mouse.mjs"
+import { isMouseInCircle, isMouseInSquare } from "../events/mouse.mjs"
 
 const NODE_OUTLINE_WIDTH = 5
 const NODE_RADIUS = GRID_STEP * 0.5
 
 let id = 0
-
-export function isPointInCircle(pointX, pointY, circleX, circleY, circleRadius) {
-  const distanceSquared = (pointX - circleX) * (pointX - circleX) + (pointY - circleY) * (pointY - circleY)
-  return distanceSquared <= circleRadius * circleRadius
-}
-
-export function isPointInRect(pointX, pointY, rectX, rectY, rectSize) {
-  return pointX >= rectX && pointX <= rectX + rectSize && pointY >= rectY && pointY <= rectY + rectSize
-}
-
-export function isMouseInCircle(circleX, circleY, circleRadius) {
-  return isPointInCircle(mouseX, mouseY, circleX, circleY, circleRadius)
-}
-
-export function isMouseInSquare(rectX, rectY, reactSize) {
-  return isPointInRect(mouseX, mouseY, rectX, rectY, reactSize)
-}
 
 export default class Node {
   constructor(x, y) {

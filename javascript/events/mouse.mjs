@@ -140,3 +140,20 @@ function mouseScroll(event) {
   trigger(EVENT.MOUSE_SCROLL)
   mouseMove(event)
 }
+
+export function isPointInCircle(pointX, pointY, circleX, circleY, circleRadius) {
+  const distanceSquared = (pointX - circleX) * (pointX - circleX) + (pointY - circleY) * (pointY - circleY)
+  return distanceSquared <= circleRadius * circleRadius
+}
+
+export function isPointInRect(pointX, pointY, rectX, rectY, rectSize) {
+  return pointX >= rectX && pointX <= rectX + rectSize && pointY >= rectY && pointY <= rectY + rectSize
+}
+
+export function isMouseInCircle(circleX, circleY, circleRadius) {
+  return isPointInCircle(x, y, circleX, circleY, circleRadius)
+}
+
+export function isMouseInSquare(rectX, rectY, reactSize) {
+  return isPointInRect(x, y, rectX, rectY, reactSize)
+}
