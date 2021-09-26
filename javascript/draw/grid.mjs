@@ -3,24 +3,29 @@ import { zoom } from "./world.mjs"
 import { subscribe, EVENT, x as mouseX, y as mouseY } from "../events/mouse.mjs"
 import { GRID_STEP } from "../settings/application.mjs"
 import { SHOW_CENTRE } from "../settings/user.mjs"
+import { GRID } from "../settings/style.mjs"
+
+export let step = { w: GRID_STEP, h: GRID_STEP }
+
+const ROOT_3_OVER_2 = 0.86602540378
 
 function drawVerticalLines() {
-  for (let x = canvas.centre.x; x > 0; x -= GRID_STEP * zoom) {
+  for (let x = canvas.centre.x; x > 0; x -= step.w * zoom) {
     context.moveTo(x, 0)
     context.lineTo(x, canvas.height)
   }
-  for (let x = canvas.centre.x + GRID_STEP * zoom; x < canvas.width; x += GRID_STEP * zoom) {
+  for (let x = canvas.centre.x + step.w * zoom; x < canvas.width; x += step.w * zoom) {
     context.moveTo(x, 0)
     context.lineTo(x, canvas.height)
   }
 }
 
 function drawHorizontalLines() {
-  for (let y = canvas.centre.y; y > 0; y -= GRID_STEP * zoom) {
+  for (let y = canvas.centre.y; y > 0; y -= step.h * zoom) {
     context.moveTo(0, y)
     context.lineTo(canvas.width, y)
   }
-  for (let y = canvas.centre.y + GRID_STEP * zoom; y < canvas.height; y += GRID_STEP * zoom) {
+  for (let y = canvas.centre.y + step.h * zoom; y < canvas.height; y += step.h * zoom) {
     context.moveTo(0, y)
     context.lineTo(canvas.width, y)
   }
@@ -46,7 +51,18 @@ function markCentre() {
 }
 
 export function draw() {
-  drawLines()
+  switch (GRID) {
+    case "triangle":
+      step.h = GRID_STEP * ROOT_3_OVER_2
+      drawLines()
+      break
+    case "square":
+    default:
+      step.h = GRID_STEP
+      drawLines()
+      break
+  }
+
   if (SHOW_CENTRE) {
     markCentre()
   }

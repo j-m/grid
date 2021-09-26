@@ -1,14 +1,14 @@
 import Node, { currentStyle } from "../classes/Node.mjs"
-import { GRID_STEP } from "../settings/application.mjs"
 import { OVERWRITE_NODES } from "../settings/user.mjs"
 import { mouse, zoom } from "./world.mjs"
+import { step } from "./grid.mjs"
 import { subscribe, EVENT } from "../events/mouse.mjs"
 import { canvas } from "../window.mjs"
 
 let nodeArray = []
 
 export function draw() {
-  const offset = GRID_STEP / 2 * zoom
+  const offset = step.w / 2 * zoom
   nodeArray.forEach(node => {
     if (node.absolute.x > -offset
       && node.absolute.x < canvas.width + offset
@@ -20,8 +20,8 @@ export function draw() {
 }
 
 function snapNodePosition(x, y) {
-  x = Math.floor(x / GRID_STEP) * GRID_STEP
-  y = Math.floor(y / GRID_STEP) * GRID_STEP
+  x = Math.floor(x / step.w) * step.w
+  y = Math.floor(y / step.h) * step.h
   return [x, y]
 }
 
