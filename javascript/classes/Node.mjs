@@ -31,13 +31,14 @@ export default class Node {
   draw() {
     context.beginPath()
     const bounds = this.absolute
+    const sizeOffset = GRID_STEP / 2 * zoom - bounds.size
     switch (this.style.shape) {
       case "circle":
-        context.arc(bounds.x, bounds.y, bounds.size, 0, 2 * Math.PI, false)
+        context.arc(bounds.x + sizeOffset, bounds.y + sizeOffset, bounds.size, 0, 2 * Math.PI, false)
         break
       case "square":
       default:
-        context.rect(bounds.x - bounds.size, bounds.y - bounds.size, bounds.size * 2, bounds.size * 2)
+        context.rect(bounds.x - bounds.size + sizeOffset, bounds.y - bounds.size + sizeOffset, bounds.size * 2, bounds.size * 2)
         break
     }
     context.fillStyle = this.style.fill
