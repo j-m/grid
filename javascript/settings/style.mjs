@@ -1,7 +1,7 @@
 export let SHAPE = "square"
-export let FILL = "black"
+export let FILL = "#000000"
 export let SIZE = "100"
-export let OUTLINE = "black"
+export let OUTLINE = "#000000"
 export let THICKNESS = "0"
 
 document.getElementById("SHAPE").addEventListener('change', () => { SHAPE = document.getElementById("SHAPE").value })
