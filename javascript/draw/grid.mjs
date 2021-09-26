@@ -7,7 +7,36 @@ import { GRID } from "../settings/style.mjs"
 
 export let step = { w: GRID_STEP, h: GRID_STEP }
 
-const ROOT_3_OVER_2 = 0.86602540378
+const ROOT_3 = Math.sqrt(3)
+const baseHeightRatio = 2 / ROOT_3 / 2
+
+function drawBackwardSlantedLines() {
+  const equilateralTriangleBase = canvas.height / ROOT_3 / 2
+  const offset = (canvas.centre.y - canvas.height / 2) * baseHeightRatio % (step.w * zoom)
+  for (let x = canvas.centre.x; x > -equilateralTriangleBase; x -= step.w * zoom) {
+    context.moveTo(x - equilateralTriangleBase - offset, 0)
+    context.lineTo(x + equilateralTriangleBase - offset, canvas.height)
+  }
+
+  for (let x = canvas.centre.x + step.w * zoom; x < canvas.width + equilateralTriangleBase; x += step.w * zoom) {
+    context.moveTo(x - equilateralTriangleBase - offset, 0)
+    context.lineTo(x + equilateralTriangleBase - offset, canvas.height)
+  }
+}
+
+function drawForwardSlantedLines() {
+  const equilateralTriangleBase = canvas.height / ROOT_3 / 2
+  const offset = (canvas.centre.y - canvas.height / 2) * baseHeightRatio % (step.w * zoom)
+  for (let x = canvas.centre.x; x > -equilateralTriangleBase; x -= step.w * zoom) {
+    context.moveTo(x + equilateralTriangleBase + offset, 0)
+    context.lineTo(x - equilateralTriangleBase + offset, canvas.height)
+  }
+
+  for (let x = canvas.centre.x + step.w * zoom; x < canvas.width + equilateralTriangleBase; x += step.w * zoom) {
+    context.moveTo(x + equilateralTriangleBase + offset, 0)
+    context.lineTo(x - equilateralTriangleBase + offset, canvas.height)
+  }
+}
 
 function drawVerticalLines() {
   for (let x = canvas.centre.x; x > 0; x -= step.w * zoom) {
@@ -34,10 +63,32 @@ function drawHorizontalLines() {
 function drawLines() {
   context.strokeStyle = 'lightgrey'
   context.lineWidth = '1'
-
+  context.setLineDash([])
+  context.lineDashOffset = 0
   context.beginPath()
-  drawVerticalLines()
-  drawHorizontalLines()
+  switch (GRID) {
+    case "triangle":
+      step.h = GRID_STEP * ROOT_3 / 2
+      drawHorizontalLines()
+      drawBackwardSlantedLines()
+      drawForwardSlantedLines()
+      break
+    case "hexagon":
+      step.h = GRID_STEP * ROOT_3 / 2
+      context.setLineDash([GRID_STEP * zoom, GRID_STEP * zoom])
+      drawHorizontalLines()
+      // context.setLineDash([GRID_STEP * 2 * zoom, GRID_STEP * zoom])
+      drawBackwardSlantedLines()
+      context.lineDashOffset = GRID_STEP * zoom / 2
+      drawForwardSlantedLines()
+      break
+    case "square":
+    default:
+      step.h = GRID_STEP
+      drawVerticalLines()
+      drawHorizontalLines()
+      break
+  }
   context.stroke()
 }
 
@@ -52,18 +103,7 @@ function markCentre() {
 }
 
 export function draw() {
-  switch (GRID) {
-    case "triangle":
-      step.h = GRID_STEP * ROOT_3_OVER_2
-      drawLines()
-      break
-    case "square":
-    default:
-      step.h = GRID_STEP
-      drawLines()
-      break
-  }
-
+  drawLines()
   if (SHOW_CENTRE) {
     markCentre()
   }
