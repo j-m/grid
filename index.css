@@ -27,7 +27,6 @@ canvas {
   left: 0;
 
   height: 100vh;
-  width: 15rem;
 
   background: rgba(0,0,0,0.7);
   color: white;
@@ -57,15 +56,29 @@ canvas {
   display: block;
 }
 
-#sidebar > fieldset > button,
-#sidebar > fieldset > select {
-  width: 100%;
-}
-
 #sidebar > fieldset > select {
   padding: 0.5rem 0.2rem;
 }
 
 #sidebar > fieldset > button {
   padding: 0.5rem; 
+}
+
+#sidebar > label > select  {
+  padding: 0.2rem;
+}
+
+#style > label {
+  text-align: right;
+  white-space: nowrap;
+}
+
+#style > label > button,
+#style > label > input,
+#style > label > select {
+  width: 10rem;
+}
+
+#actions > button {
+  width: 100%;
 }
