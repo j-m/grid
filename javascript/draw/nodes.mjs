@@ -5,11 +5,11 @@ import { step } from "./grid.mjs"
 import { subscribe, EVENT } from "../events/mouse.mjs"
 import { canvas } from "../window.mjs"
 
-let nodeArray = []
+let nodes = {}
 
 export function draw() {
   const offset = step.w / 2 * zoom
-  nodeArray.forEach(node => {
+  Object.values(nodes).forEach(node => {
     if (node.absolute.x > -offset
       && node.absolute.x < canvas.width + offset
       && node.absolute.y > -offset
@@ -32,17 +32,13 @@ function createNode() {
     return
   }
   const [x, y] = snapNodePosition(mouse.x, mouse.y)
-  const index = nodeArray.findIndex(node => node.x === x && node.y === y)
-  if (OVERWRITE_NODES === true && index !== -1) {
-    nodeArray.splice(index, 1)
-  }
-  if (OVERWRITE_NODES === true || OVERWRITE_NODES === false && index === -1) {
-    nodeArray.push(new Node(x, y))
+  if (OVERWRITE_NODES === true || OVERWRITE_NODES === false && !nodes[`${x}.${y}`]) {
+    nodes[`${x}.${y}`] = new Node(x, y)
   }
 }
 
-document.getElementById("CONVERT_ALL").onclick = () => { nodeArray.forEach(node => { node.style = currentStyle() }) }
-document.getElementById("CLEAR_ALL").onclick = () => { nodeArray = [] }
+document.getElementById("CONVERT_ALL").onclick = () => { Object.values(nodes).forEach(node => { node.style = currentStyle() }) }
+document.getElementById("CLEAR_ALL").onclick = () => { nodes = {} }
 
 subscribe(EVENT.MOUSE_MOVE, createNode)
 subscribe(EVENT.MOUSE_DOWN_LEFT, () => { drawing = true })
