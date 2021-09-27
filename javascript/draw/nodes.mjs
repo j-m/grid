@@ -19,9 +19,9 @@ export function draw() {
   })
 }
 
-function snapNodePosition(x, y) {
-  x = Math.floor(x / step.w) * step.w
-  y = Math.floor(y / step.h) * step.h
+function getNodePositionFromMouse() {
+  const x = Math.floor(mouse.x / step.w)
+  const y = Math.floor(mouse.y / step.h)
   return [x, y]
 }
 
@@ -31,7 +31,7 @@ function createNode() {
   if (!drawing) {
     return
   }
-  const [x, y] = snapNodePosition(mouse.x, mouse.y)
+  const [x, y] = getNodePositionFromMouse()
   if (OVERWRITE_NODES === true || OVERWRITE_NODES === false && !nodes[`${x}.${y}`]) {
     nodes[`${x}.${y}`] = new Node(x, y)
   }

@@ -1,4 +1,4 @@
-import { SHAPE, FILL, SIZE, OUTLINE, THICKNESS } from "../settings/style.mjs"
+import { SHAPE, FILL, GRID, SIZE, OUTLINE, THICKNESS } from "../settings/style.mjs"
 import { canvas, context } from "../window.mjs"
 import { zoom } from "../draw/world.mjs"
 import { step } from "../draw/grid.mjs"
@@ -24,8 +24,8 @@ export default class Node {
     const minStep = step.w < step.h ? step.w : step.h
     const borderWidth = this.style.thickness * minStep * zoom
     return {
-      x: (this.x + step.w * 0.5 * this.style.size) * zoom + canvas.centre.x - borderWidth / 2,
-      y: (this.y + step.h * 0.5 * this.style.size) * zoom + canvas.centre.y - borderWidth / 2,
+      x: (this.x * step.w * (GRID === "square" ? 1 : 0.5) + step.w * 0.5 * this.style.size) * zoom + canvas.centre.x - borderWidth / 2,
+      y: (this.y * step.h + step.h * 0.5 * this.style.size) * zoom + canvas.centre.y - borderWidth / 2,
       w: this.style.size * zoom * step.w * 0.5 - borderWidth / 2,
       h: this.style.size * zoom * step.h * 0.5 - borderWidth / 2
     }
@@ -41,9 +41,16 @@ export default class Node {
         context.ellipse(x, y, w, h, 0, 2 * Math.PI, false)
         break
       case "triangle":
-        context.moveTo(x - w, y + h)
-        context.lineTo(x + w, y + h)
-        context.lineTo(x, y - h)
+        if (Math.abs(this.y) % 2 === 0 && Math.abs(this.x) % 2 === 0
+          || Math.abs(this.y) % 2 === 1 && Math.abs(this.x) % 2 === 1) {
+          context.moveTo(x - w, y - h)
+          context.lineTo(x + w, y - h)
+          context.lineTo(x, y + h)
+        } else {
+          context.moveTo(x - w, y + h)
+          context.lineTo(x + w, y + h)
+          context.lineTo(x, y - h)
+        }
         break
       case "hexagon":
         context.moveTo(x - w, y)
