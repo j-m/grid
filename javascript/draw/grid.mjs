@@ -75,11 +75,24 @@ function drawHexagonalLine() {
   step.h = GRID_STEP * ROOT_3 / 2
 
   context.beginPath()
-  context.setLineDash([GRID_STEP * zoom, GRID_STEP * zoom])
+  context.setLineDash([step.w * zoom, step.w * zoom])
+  context.lineDashOffset = 0
   drawHorizontalLines()
-  // context.setLineDash([GRID_STEP * 2 * zoom, GRID_STEP * zoom])
+  context.stroke()
+
+  context.beginPath()
+  context.lineDashOffset = step.w * zoom
+  drawHorizontalLines(step.h / 2 * zoom)
+  context.stroke()
+
+  context.beginPath()
+  context.lineDashOffset = 10
+  context.lineDashOffset = step.w * zoom / 2
   drawBackwardSlantedLines()
-  context.lineDashOffset = GRID_STEP * zoom / 2
+  context.stroke()
+
+  context.beginPath()
+  context.lineDashOffset = step.w * zoom / 2
   drawForwardSlantedLines()
   context.stroke()
 }
