@@ -49,15 +49,48 @@ function drawVerticalLines() {
   }
 }
 
-function drawHorizontalLines() {
+function drawHorizontalLines(offset = 0) {
   for (let y = canvas.centre.y; y > 0; y -= step.h * zoom) {
-    context.moveTo(0, y)
-    context.lineTo(canvas.width, y)
+    context.moveTo(0, y + offset)
+    context.lineTo(canvas.width, y + offset)
   }
   for (let y = canvas.centre.y + step.h * zoom; y < canvas.height; y += step.h * zoom) {
-    context.moveTo(0, y)
-    context.lineTo(canvas.width, y)
+    context.moveTo(0, y + offset)
+    context.lineTo(canvas.width, y + offset)
   }
+}
+
+
+function drawTriangularLines() {
+  step.h = GRID_STEP * ROOT_3 / 2
+
+  context.beginPath()
+  drawHorizontalLines()
+  drawBackwardSlantedLines()
+  drawForwardSlantedLines()
+  context.stroke()
+}
+
+function drawHexagonalLine() {
+  step.h = GRID_STEP * ROOT_3 / 2
+
+  context.beginPath()
+  context.setLineDash([GRID_STEP * zoom, GRID_STEP * zoom])
+  drawHorizontalLines()
+  // context.setLineDash([GRID_STEP * 2 * zoom, GRID_STEP * zoom])
+  drawBackwardSlantedLines()
+  context.lineDashOffset = GRID_STEP * zoom / 2
+  drawForwardSlantedLines()
+  context.stroke()
+}
+
+function drawSquareLines() {
+  step.h = GRID_STEP
+
+  context.beginPath()
+  drawVerticalLines()
+  drawHorizontalLines()
+  context.stroke()
 }
 
 function drawLines() {
@@ -65,31 +98,18 @@ function drawLines() {
   context.lineWidth = '1'
   context.setLineDash([])
   context.lineDashOffset = 0
-  context.beginPath()
   switch (GRID) {
     case "triangle":
-      step.h = GRID_STEP * ROOT_3 / 2
-      drawHorizontalLines()
-      drawBackwardSlantedLines()
-      drawForwardSlantedLines()
+      drawTriangularLines()
       break
     case "hexagon":
-      step.h = GRID_STEP * ROOT_3 / 2
-      context.setLineDash([GRID_STEP * zoom, GRID_STEP * zoom])
-      drawHorizontalLines()
-      // context.setLineDash([GRID_STEP * 2 * zoom, GRID_STEP * zoom])
-      drawBackwardSlantedLines()
-      context.lineDashOffset = GRID_STEP * zoom / 2
-      drawForwardSlantedLines()
+      drawHexagonalLine()
       break
     case "square":
     default:
-      step.h = GRID_STEP
-      drawVerticalLines()
-      drawHorizontalLines()
+      drawSquareLines()
       break
   }
-  context.stroke()
 }
 
 function markCentre() {
