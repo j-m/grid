@@ -2,8 +2,8 @@ import { canvas, context } from "../window.mjs"
 import { zoom } from "./world.mjs"
 import { subscribe, EVENT, x as mouseX, y as mouseY } from "../events/mouse.mjs"
 import { GRID_STEP } from "../settings/application.mjs"
-import { SHOW_CENTRE } from "../settings/user.mjs"
-import { GRID } from "../settings/style.mjs"
+import userSettings from "../settings/user.mjs"
+import styleSettings from "../settings/style.mjs"
 
 export let step = { w: GRID_STEP, h: GRID_STEP }
 
@@ -111,7 +111,7 @@ function drawLines() {
   context.lineWidth = '1'
   context.setLineDash([])
   context.lineDashOffset = 0
-  switch (GRID) {
+  switch (styleSettings.grid) {
     case "triangle":
       drawTriangularLines()
       break
@@ -137,7 +137,7 @@ function markCentre() {
 
 export function draw() {
   drawLines()
-  if (SHOW_CENTRE) {
+  if (userSettings.showCentre) {
     markCentre()
   }
 }

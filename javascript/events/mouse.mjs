@@ -1,5 +1,5 @@
 import { canvas } from "../window.mjs"
-import { INVERT_SCROLL } from "../settings/user.mjs"
+import userSettings from "../settings/user.mjs"
 
 export let EVENT = {
   MOUSE_MOVE: "mouseMove",
@@ -124,10 +124,10 @@ function mouseUp(event) {
 function mouseScroll(event) {
   hasMovedSinceDown = true
   if (event.deltaY < 0) {
-    trigger(INVERT_SCROLL ? EVENT.MOUSE_SCROLL_OUT : EVENT.MOUSE_SCROLL_IN)
+    trigger(userSettings.invertScroll ? EVENT.MOUSE_SCROLL_OUT : EVENT.MOUSE_SCROLL_IN)
   }
   if (event.deltaY > 0) {
-    trigger(INVERT_SCROLL ? EVENT.MOUSE_SCROLL_IN : EVENT.MOUSE_SCROLL_OUT)
+    trigger(userSettings.invertScroll ? EVENT.MOUSE_SCROLL_IN : EVENT.MOUSE_SCROLL_OUT)
   }
   trigger(EVENT.MOUSE_SCROLL)
   mouseMove(event)

@@ -1,15 +1,15 @@
-import { SHAPE, FILL, GRID, SIZE, OUTLINE, THICKNESS } from "../settings/style.mjs"
+import styleSettings from "../settings/style.mjs"
 import { canvas, context } from "../window.mjs"
 import { zoom } from "../draw/world.mjs"
 import { step } from "../draw/grid.mjs"
 
 export function currentStyle() {
   return {
-    shape: SHAPE,
-    fill: FILL,
-    size: SIZE / 100,
-    outline: OUTLINE,
-    thickness: THICKNESS / 100
+    shape: styleSettings.shape,
+    fill: styleSettings.fill,
+    size: styleSettings.size / 100,
+    outline: styleSettings.outline,
+    thickness: styleSettings.thickness / 100
   }
 }
 
@@ -24,7 +24,7 @@ export default class Node {
     const minStep = step.w < step.h ? step.w : step.h
     const borderWidth = this.style.thickness * minStep * zoom
     return {
-      x: (this.x * step.w * (GRID === "square" ? 1 : 0.5) + step.w * 0.5 * this.style.size) * zoom + canvas.centre.x - borderWidth / 2,
+      x: (this.x * step.w * (styleSettings.grid === "square" ? 1 : 0.5) + step.w * 0.5 * this.style.size) * zoom + canvas.centre.x - borderWidth / 2,
       y: (this.y * step.h + step.h * 0.5 * this.style.size) * zoom + canvas.centre.y - borderWidth / 2,
       w: this.style.size * zoom * step.w * 0.5 - borderWidth / 2,
       h: this.style.size * zoom * step.h * 0.5 - borderWidth / 2

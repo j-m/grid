@@ -1,5 +1,5 @@
 import Node, { currentStyle } from "../classes/Node.mjs"
-import { OVERWRITE_NODES } from "../settings/user.mjs"
+import userSettings from "../settings/user.mjs"
 import { mouse, zoom } from "./world.mjs"
 import { step } from "./grid.mjs"
 import { subscribe, EVENT } from "../events/mouse.mjs"
@@ -32,7 +32,8 @@ function createNode() {
     return
   }
   const [x, y] = getNodePositionFromMouse()
-  if (OVERWRITE_NODES === true || OVERWRITE_NODES === false && !nodes[`${x}.${y}`]) {
+  if (userSettings.overwriteNodes === true
+    || userSettings.overwriteNodes === false && !nodes[`${x}.${y}`]) {
     nodes[`${x}.${y}`] = new Node(x, y)
   }
 }
