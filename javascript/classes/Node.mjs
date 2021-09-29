@@ -24,7 +24,7 @@ export default class Node {
     const minStep = step.w < step.h ? step.w : step.h
     const borderWidth = this.style.thickness * minStep * zoom
     return {
-      x: (this.x * step.w * (styleSettings.grid === "square" ? 1 : 0.5) + step.w * 0.5 * this.style.size) * zoom + canvas.centre.x - borderWidth / 2,
+      x: (this.x * step.w * (styleSettings.grid === "triangle" ? 0.5 : 1) + step.w * 0.5 * this.style.size) * zoom + canvas.centre.x - borderWidth / 2,
       y: (this.y * step.h + step.h * 0.5 * this.style.size) * zoom + canvas.centre.y - borderWidth / 2,
       w: this.style.size * zoom * step.w * 0.5 - borderWidth / 2,
       h: this.style.size * zoom * step.h * 0.5 - borderWidth / 2

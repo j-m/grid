@@ -1,5 +1,6 @@
 import Node, { currentStyle } from "../classes/Node.mjs"
 import userSettings from "../settings/user.mjs"
+import styleSettings from "../settings/style.mjs"
 import { mouse, zoom } from "./world.mjs"
 import { step } from "./grid.mjs"
 import { subscribe, EVENT } from "../events/mouse.mjs"
@@ -20,7 +21,7 @@ export function draw() {
 }
 
 function getNodePositionFromMouse() {
-  const x = Math.floor(mouse.x / step.w)
+  const x = Math.floor(mouse.x * (styleSettings.grid === "triangle" ? 2 : 1) / step.w)
   const y = Math.floor(mouse.y / step.h)
   return [x, y]
 }
