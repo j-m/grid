@@ -1,3 +1,5 @@
+import { retrieve, update } from "./storage.mjs"
+
 const defaultStyleSettings = {
   grid: "triangle",
   shape: "triangle",
@@ -6,21 +8,12 @@ const defaultStyleSettings = {
   outline: "#000000",
   thickness: "0"
 }
-let styleSettings = defaultStyleSettings
-export default styleSettings
 
-const data = localStorage.getItem('style')
-function updateStoredValue() {
-  localStorage.setItem("style", JSON.stringify(styleSettings))
-}
-if (data === null) {
-  updateStoredValue()
-} else {
-  styleSettings = JSON.parse(data)
-}
+const styleSettings = retrieve("style", defaultStyleSettings)
+export default styleSettings
 function change(key, value) {
   styleSettings[key] = value
-  updateStoredValue()
+  update("style", value)
 }
 
 const grid = document.getElementById("GRID")

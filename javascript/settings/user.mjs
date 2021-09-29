@@ -1,23 +1,16 @@
+import { retrieve, update } from "./storage.mjs"
+
 const defaultUserSettings = {
   invertScroll: false,
   showCentre: true,
   overwriteNodes: false
 }
-let userSettings = defaultUserSettings
-export default userSettings
 
-const data = localStorage.getItem('user')
-function updateStoredValue() {
-  localStorage.setItem("user", JSON.stringify(userSettings))
-}
-if (data === null) {
-  updateStoredValue()
-} else {
-  userSettings = JSON.parse(data)
-}
+const userSettings = retrieve("user", defaultUserSettings)
+export default userSettings
 function change(key, value) {
   userSettings[key] = value
-  updateStoredValue()
+  update("user", value)
 }
 
 const invertScroll = document.getElementById("INVERT_SCROLL")
