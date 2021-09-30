@@ -13,7 +13,7 @@ const styleSettings = retrieve("style", defaultStyleSettings)
 export default styleSettings
 function change(key, value) {
   styleSettings[key] = value
-  update("style", value)
+  update("style", styleSettings)
 }
 
 const grid = document.getElementById("GRID")
