@@ -127,7 +127,7 @@ function drawLines() {
 
 function markCentre() {
   context.beginPath()
-  context.arc(canvas.centre.x, canvas.centre.y, 5 * zoom, 0, 2 * Math.PI, false)
+  context.arc(canvas.centre.x, canvas.centre.y, 5, 0, 2 * Math.PI, false)
   context.fillStyle = 'red'
   context.fill()
   context.lineWidth = 1
