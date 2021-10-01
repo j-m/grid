@@ -6,7 +6,7 @@ export function update(key, data) {
 
 export function retrieve(key, defaultValue) {
   try {
-    const data = localStorage.getItem('style')
+    const data = localStorage.getItem(key)
     if (data === null) {
       update(key, defaultValue)
       return defaultValue
