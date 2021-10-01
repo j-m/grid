@@ -51,5 +51,7 @@ function initialise() {
   draw()
 }
 
+document.getElementById("FULLSCREEN").addEventListener("click", () => { canvas.requestFullscreen() }, { passive: true })
+
 window.addEventListener('resize', resizeCanvas, { passive: true })
 window.addEventListener('load', initialise, { passive: false })
