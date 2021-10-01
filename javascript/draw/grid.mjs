@@ -106,11 +106,15 @@ function drawSquareLines() {
   context.stroke()
 }
 
-function drawLines() {
+function resetStyle() {
   context.strokeStyle = 'lightgrey'
   context.lineWidth = '1'
   context.setLineDash([])
   context.lineDashOffset = 0
+}
+
+function drawLines() {
+  resetStyle()
   switch (styleSettings.grid) {
     case "triangle":
       drawTriangularLines()
@@ -123,6 +127,7 @@ function drawLines() {
       drawSquareLines()
       break
   }
+  resetStyle()
 }
 
 function markCentre() {
