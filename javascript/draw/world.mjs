@@ -35,6 +35,38 @@ export function onMouseMove() {
   mouse.y = Math.round((mouseY - canvas.centre.y) / zoom)
 }
 
+
+let dragging = false
+let previousCentre = {}
+let dragFrom = {}
+
+function shouldMove() {
+  return true
+}
+
+export function startMoving() {
+  if (shouldMove()) {
+    dragging = true
+    dragFrom = { x: mouseX, y: mouseY }
+    previousCentre = { x: canvas.centre.x, y: canvas.centre.y }
+  }
+}
+
+export function move() {
+  if (shouldMove() && dragging) {
+    canvas.centre.x = previousCentre.x + (mouseX - dragFrom.x) * zoom
+    canvas.centre.y = previousCentre.y + (mouseY - dragFrom.y) * zoom
+  }
+}
+
+export function stopMoving() {
+  dragging = false
+}
+
+subscribe(EVENT.MOUSE_DOWN_RIGHT, startMoving)
+subscribe(EVENT.MOUSE_MOVE, move)
+subscribe(EVENT.MOUSE_UP_RIGHT, stopMoving)
+
 subscribe(EVENT.MOUSE_SCROLL_IN, zoomIn)
 subscribe(EVENT.MOUSE_SCROLL_OUT, zoomOut)
 subscribe(EVENT.MOUSE_MOVE, onMouseMove)
