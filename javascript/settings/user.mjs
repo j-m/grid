@@ -10,7 +10,7 @@ const userSettings = retrieve("user", defaultUserSettings)
 export default userSettings
 function change(key, value) {
   userSettings[key] = value
-  update("user", value)
+  update("user", userSettings)
 }
 
 const invertScroll = document.getElementById("INVERT_SCROLL")
