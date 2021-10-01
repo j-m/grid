@@ -54,8 +54,8 @@ export function startMoving() {
 
 export function move() {
   if (shouldMove() && dragging) {
-    canvas.centre.x = previousCentre.x + (mouseX - dragFrom.x) * zoom
-    canvas.centre.y = previousCentre.y + (mouseY - dragFrom.y) * zoom
+    canvas.centre.x = previousCentre.x + (mouseX - dragFrom.x)
+    canvas.centre.y = previousCentre.y + (mouseY - dragFrom.y)
   }
 }
 
