@@ -47,12 +47,24 @@ export function subscribe(type, func) {
   }
 }
 
-export function initialise() {
-  canvas.addEventListener('mousedown', mouseDown, { passive: true })
-  canvas.addEventListener('mousemove', mouseMove, { passive: true })
-  canvas.addEventListener('mouseup', mouseUp, { passive: true })
-  canvas.addEventListener('wheel', mouseScroll, { passive: true })
-  canvas.addEventListener('contextmenu', mouseContextMenu, { passive: false })
+export function lockChange() {
+  if (document.pointerLockElement === canvas) {
+    x = canvas.width / 2
+    y = canvas.height / 2
+    document.addEventListener('mousedown', mouseDown, { passive: true })
+    document.addEventListener('mousemove', mouseMove, { passive: true })
+    document.addEventListener('mouseup', mouseUp, { passive: true })
+    document.addEventListener('wheel', mouseScroll, { passive: true })
+    document.addEventListener('contextmenu', mouseContextMenu, { passive: false })
+  } else {
+    document.removeEventListener('mousedown', mouseDown, { passive: true })
+    document.removeEventListener('mousemove', mouseMove, { passive: true })
+    document.removeEventListener('mouseup', mouseUp, { passive: true })
+    document.removeEventListener('wheel', mouseScroll, { passive: true })
+    document.removeEventListener('contextmenu', mouseContextMenu, { passive: false })
+
+    trigger(EVENT.MOUSE_UP)
+  }
 }
 
 function trigger(type) {
@@ -74,13 +86,18 @@ function mouseContextMenu(event) {
 
 function mouseMove(event) {
   canvas.style.cursor = 'default'
-  const canvasRect = canvas.getBoundingClientRect()
-  if (x !== event.x - canvasRect.x
-    && y !== event.y - canvasRect.y) {
-    hasMovedSinceDown = true
-  }
-  x = event.x - canvasRect.x
-  y = event.y - canvasRect.y
+  x += event.movementX
+  x = x < 0
+    ? 0
+    : x > canvas.width
+      ? canvas.width
+      : x
+  y += event.movementY
+  y = y < 0
+    ? 0
+    : y > canvas.height
+      ? canvas.height
+      : y
   trigger(EVENT.MOUSE_MOVE)
 }
 

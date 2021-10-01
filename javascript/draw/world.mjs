@@ -2,6 +2,7 @@ import { subscribe, EVENT, x as mouseX, y as mouseY } from "../events/mouse.mjs"
 import { ZOOM_STEP } from "../settings/application.mjs"
 import { draw as gridDraw } from "./grid.mjs"
 import { draw as nodesDraw } from "./nodes.mjs"
+import { draw as mouseDraw } from "./mouse.mjs"
 import { canvas } from "../window.mjs"
 
 export let zoom = 1
@@ -9,6 +10,7 @@ export let zoom = 1
 export function draw() {
   gridDraw()
   nodesDraw()
+  mouseDraw()
 }
 
 export function zoomIn() {

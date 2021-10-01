@@ -29,10 +29,24 @@ function resizeCanvas() {
   draw()
 }
 
+export let canvasHasFocus = false
+function lockChange() {
+  mouse.lockChange()
+  canvasHasFocus = document.pointerLockElement === canvas
+}
+
+function lockPointer() {
+  if (canvas && !canvasHasFocus) {
+    canvas.requestPointerLock()
+  }
+}
+
 function initialise() {
   canvas = document.querySelector('canvas')
   context = canvas.getContext('2d')
-  mouse.initialise()
+  document.addEventListener('pointerlockchange', lockChange, { passive: true })
+  document.addEventListener("pointerlockerror", () => console.error("Could not lock pointer"), { passive: true })
+  canvas.onclick = lockPointer
   resizeCanvas()
   draw()
 }
