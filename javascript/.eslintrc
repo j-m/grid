@@ -239,7 +239,10 @@
     "require-await": "error",
     "require-unicode-regexp": "error",
     "rest-spread-spacing": "error",
-    "semi": "off",
+    "semi": [
+      "error",
+      "never"
+    ],
     "semi-spacing": [
       "error",
       {
