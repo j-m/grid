@@ -15,10 +15,15 @@ export let canvas = {
 export let context
 
 function draw() {
-  requestAnimationFrame(draw)
-  if (!canvas || !context) { return }
   context.clearRect(0, 0, canvas.width, canvas.height)
   world.draw()
+}
+
+function loop() {
+  requestAnimationFrame(loop)
+  if (!canvas || !context) { return }
+  if (!isCanvasFocused) { return }
+  draw()
 }
 
 function resizeCanvas() {
@@ -29,14 +34,15 @@ function resizeCanvas() {
   draw()
 }
 
-export let canvasHasFocus = false
+export let isCanvasFocused = false
 function lockChange() {
+  isCanvasFocused = document.pointerLockElement === canvas
   mouse.lockChange()
-  canvasHasFocus = document.pointerLockElement === canvas
+  draw()
 }
 
 function lockPointer() {
-  if (canvas && !canvasHasFocus) {
+  if (canvas && !isCanvasFocused) {
     canvas.requestPointerLock()
   }
 }
@@ -44,13 +50,13 @@ function lockPointer() {
 function initialise() {
   canvas = document.querySelector('canvas')
   context = canvas.getContext('2d')
-  document.addEventListener('pointerlockchange', lockChange, { passive: true })
-  document.addEventListener("pointerlockerror", () => console.error("Could not lock pointer"), { passive: true })
   canvas.onclick = lockPointer
   resizeCanvas()
-  draw()
+  loop()
 }
 
+document.addEventListener('pointerlockchange', lockChange, { passive: true })
+document.addEventListener("pointerlockerror", () => console.error("Could not lock pointer"), { passive: true })
 document.getElementById("FULLSCREEN").addEventListener("click", () => { canvas.requestFullscreen() }, { passive: true })
 
 window.addEventListener('resize', resizeCanvas, { passive: true })
