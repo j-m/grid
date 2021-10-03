@@ -3,7 +3,7 @@ import userSettings from "../settings/user.mjs"
 import styleSettings from "../settings/style.mjs"
 import { mouse, zoom } from "./world.mjs"
 import { step } from "./grid.mjs"
-import { subscribe, EVENT } from "../events/mouse.mjs"
+import { subscribe, EVENT } from "../events/manager.mjs"
 import { canvas } from "../window.mjs"
 
 let nodes = {}

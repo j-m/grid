@@ -1,4 +1,5 @@
-import { subscribe, EVENT, x as mouseX, y as mouseY } from "../events/mouse.mjs"
+import { x as mouseX, y as mouseY } from "../events/mouse.mjs"
+import { subscribe, EVENT } from "../events/manager.mjs"
 import { ZOOM_STEP } from "../settings/application.mjs"
 import { draw as gridDraw } from "./grid.mjs"
 import { draw as nodesDraw } from "./nodes.mjs"

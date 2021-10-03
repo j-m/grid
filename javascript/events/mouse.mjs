@@ -1,51 +1,10 @@
 import { canvas } from "../window.mjs"
 import userSettings from "../settings/user.mjs"
-
-export let EVENT = {
-  MOUSE_MOVE: "mouseMove",
-  MOUSE_DOWN: "mouseDown",
-  MOUSE_DOWN_LEFT: "mouseDownLeft",
-  MOUSE_DOWN_MIDDLE: "mouseDownMiddle",
-  MOUSE_DOWN_RIGHT: "mouseDownRight",
-  MOUSE_DOWN_OTHER: "mouseDownOther",
-  MOUSE_UP: "mouseUp",
-  MOUSE_UP_LEFT: "mouseUpLeft",
-  MOUSE_UP_MIDDLE: "mouseUpMiddle",
-  MOUSE_UP_RIGHT: "mouseUpRight",
-  MOUSE_UP_OTHER: "mouseUpOther",
-  MOUSE_SCROLL: "mouseScroll",
-  MOUSE_SCROLL_IN: "mouseScrollIn",
-  MOUSE_SCROLL_OUT: "mouseScrollOut"
-}
+import { trigger, EVENT } from "./manager.mjs"
 
 export let x = 0
 export let y = 0
 export let hasMovedSinceDown = false
-
-export let subscriptions = {
-  mouseMove: [],
-  mouseDown: [],
-  mouseDownLeft: [],
-  mouseDownMiddle: [],
-  mouseDownRight: [],
-  mouseDownOther: [],
-  mouseUp: [],
-  mouseUpLeft: [],
-  mouseUpMiddle: [],
-  mouseUpRight: [],
-  mouseUpOther: [],
-  mouseScroll: [],
-  mouseScrollIn: [],
-  mouseScrollOut: []
-}
-
-export function subscribe(type, func) {
-  if (subscriptions[type]) {
-    subscriptions[type].push(func)
-  } else {
-    throw "BAD_CODE: Use the mouse.EVENT_TYPE enum"
-  }
-}
 
 export function lockChange() {
   if (document.pointerLockElement === canvas) {
@@ -64,16 +23,6 @@ export function lockChange() {
     document.removeEventListener('contextmenu', mouseContextMenu, { passive: false })
 
     trigger(EVENT.MOUSE_UP)
-  }
-}
-
-function trigger(type) {
-  if (subscriptions[type]) {
-    for (const subscription of subscriptions[type]) {
-      subscription()
-    }
-  } else {
-    throw "BAD_CODE: Use the mouse.EVENT_TYPE enum"
   }
 }
 
