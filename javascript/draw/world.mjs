@@ -7,6 +7,8 @@ import { draw as mouseDraw } from "./mouse.mjs"
 import { canvas, isCanvasFocused, context } from "../window.mjs"
 
 export let zoom = 1
+export const ZOOM_MIN = 0.1
+export const ZOOM_MAX = 4
 
 export function draw() {
   if (isCanvasFocused) {
@@ -20,7 +22,7 @@ export function draw() {
 }
 
 export function zoomIn() {
-  if (zoom < 2 - ZOOM_STEP) {
+  if (zoom < ZOOM_MAX - ZOOM_STEP) {
     const zoomDifference = (zoom + ZOOM_STEP) / zoom
     canvas.centre.x = mouseX - (mouseX - canvas.centre.x) * zoomDifference
     canvas.centre.y = mouseY - (mouseY - canvas.centre.y) * zoomDifference
@@ -29,7 +31,7 @@ export function zoomIn() {
 }
 
 export function zoomOut() {
-  if (zoom > ZOOM_STEP + 0.1) {
+  if (zoom > ZOOM_STEP + ZOOM_MIN) {
     const zoomDifference = (zoom - ZOOM_STEP) / zoom
     canvas.centre.x = mouseX - (mouseX - canvas.centre.x) * zoomDifference
     canvas.centre.y = mouseY - (mouseY - canvas.centre.y) * zoomDifference
