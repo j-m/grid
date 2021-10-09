@@ -14,6 +14,8 @@ export let canvas = {
 }
 export let context
 
+let blurDiv = undefined
+
 function draw() {
   context.clearRect(0, 0, canvas.width, canvas.height)
   world.draw()
@@ -37,6 +39,11 @@ function resizeCanvas() {
 export let isCanvasFocused = false
 function lockChange() {
   isCanvasFocused = document.pointerLockElement === canvas
+  if (isCanvasFocused) {
+    blurDiv.classList.add('hidden')
+  } else {
+    blurDiv.classList.remove('hidden')
+  }
   mouse.lockChange()
   draw()
 }
@@ -50,6 +57,7 @@ function lockPointer() {
 function initialise() {
   canvas = document.querySelector('canvas')
   context = canvas.getContext('2d')
+  blurDiv = document.getElementById("blur")
   canvas.onclick = lockPointer
   resizeCanvas()
   loop()

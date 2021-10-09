@@ -5,18 +5,13 @@ import { draw as gridDraw } from "./grid.mjs"
 import { draw as nodesDraw } from "./nodes.mjs"
 import { draw as mouseDraw } from "./mouse.mjs"
 import { draw as menuDraw } from "./menu.mjs"
-import { canvas, isCanvasFocused, context } from "../window.mjs"
+import { canvas } from "../window.mjs"
 
 export let zoom = 1
 export const ZOOM_MIN = 0.1
 export const ZOOM_MAX = 4
 
 export function draw() {
-  if (isCanvasFocused) {
-    context.filter = "none"
-  } else {
-    context.filter = 'blur(5px)'
-  }
   gridDraw()
   nodesDraw()
   mouseDraw()

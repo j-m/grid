@@ -11,10 +11,28 @@ body {
   font-family: Arial, sans-serif;
 }
 
+#blur {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+
+  display: block;
+
+  backdrop-filter: blur(4px);
+  pointer-events: none;
+}
+#blur.hidden{
+  display: none;
+}
+
 canvas {
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 1;
 
   display: block;
   width: 100vw;
@@ -27,6 +45,7 @@ canvas {
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 3;
 
   height: 100vh;
 
