@@ -4,6 +4,7 @@ import { ZOOM_STEP } from "../settings/application.mjs"
 import { draw as gridDraw } from "./grid.mjs"
 import { draw as nodesDraw } from "./nodes.mjs"
 import { draw as mouseDraw } from "./mouse.mjs"
+import { draw as tipsDraw } from "./tips.mjs"
 import { draw as menuDraw } from "./menu.mjs"
 import { canvas } from "../window.mjs"
 
@@ -15,6 +16,7 @@ export function draw() {
   gridDraw()
   nodesDraw()
   mouseDraw()
+  tipsDraw()
   menuDraw()
 }
 

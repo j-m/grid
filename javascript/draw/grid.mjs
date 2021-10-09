@@ -1,7 +1,6 @@
 import { canvas, context } from "../window.mjs"
 import { zoom } from "./world.mjs"
 import { GRID_STEP } from "../settings/application.mjs"
-import userSettings from "../settings/user.mjs"
 import styleSettings from "../settings/style.mjs"
 
 export let step = { w: GRID_STEP, h: GRID_STEP }
@@ -129,34 +128,6 @@ function drawLines() {
   resetStyle()
 }
 
-function markCentre() {
-  context.beginPath()
-  context.arc(
-    canvas.centre.x < 0
-      ? 0
-      : canvas.centre.x > canvas.width
-        ? canvas.width
-        : canvas.centre.x,
-    canvas.centre.y < 0
-      ? 0
-      : canvas.centre.y > canvas.height
-        ? canvas.height
-        : canvas.centre.y,
-    5,
-    0,
-    2 * Math.PI,
-    false
-  )
-  context.fillStyle = 'red'
-  context.fill()
-  context.lineWidth = 1
-  context.strokeStyle = 'black'
-  context.stroke()
-}
-
 export function draw() {
   drawLines()
-  if (userSettings.showCentre) {
-    markCentre()
-  }
 }
