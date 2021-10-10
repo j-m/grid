@@ -1,0 +1,12 @@
+<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" fill="black" d="
+    M 30 8 a 1,1 0 0,0 0,44 a 1,1 0 0,0 0,-44z
+    M 30 20 a 1,1 0 1,0 0,20 a 1,1 0 1,0 0,-20z
+  " />
+  <path fill="black" d="M 30 1 l 6 0 l 2 10 l -16 0 l 2 -10 z" />
+  <path fill="black" d="M 30 1 l 6 0 l 2 10 l -16 0 l 2 -10 z" transform="rotate(60)" transform-origin="center" />
+  <path fill="black" d="M 30 1 l 6 0 l 2 10 l -16 0 l 2 -10 z" transform="rotate(120)" transform-origin="center" />
+  <path fill="black" d="M 30 1 l 6 0 l 2 10 l -16 0 l 2 -10 z" transform="rotate(180)" transform-origin="center" />
+  <path fill="black" d="M 30 1 l 6 0 l 2 10 l -16 0 l 2 -10 z" transform="rotate(240)" transform-origin="center" />
+  <path fill="black" d="M 30 1 l 6 0 l 2 10 l -16 0 l 2 -10 z" transform="rotate(300)" transform-origin="center" />
+</svg>
