@@ -4,12 +4,16 @@ import { trigger, EVENT } from "./manager.mjs"
 
 export let x = 0
 export let y = 0
+
+export function setPosition(newX, newY) {
+  x = newX
+  y = newY
+}
+
 export let hasMovedSinceDown = false
 
 export function lockChange() {
   if (document.pointerLockElement === canvas) {
-    x = canvas.width / 2
-    y = canvas.height / 2
     document.addEventListener('mousedown', mouseDown, { passive: true })
     document.addEventListener('mousemove', mouseMove, { passive: true })
     document.addEventListener('mouseup', mouseUp, { passive: true })

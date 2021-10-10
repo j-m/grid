@@ -37,7 +37,7 @@ function resizeCanvas() {
 }
 
 export let isCanvasFocused = false
-function lockChange() {
+function onLockChange() {
   isCanvasFocused = document.pointerLockElement === canvas
   if (isCanvasFocused) {
     blurDiv.classList.add('hidden')
@@ -48,13 +48,22 @@ function lockChange() {
   draw()
 }
 
-function lockPointer() {
+function lockPointer(event) {
   if (canvas && !isCanvasFocused) {
     canvas.requestPointerLock()
+    mouse.setPosition(event.clientX, event.clientY)
   }
 }
 
+function fullscreen() {
+  canvas.requestFullscreen()
+}
+
 function initialise() {
+  document.addEventListener('pointerlockchange', onLockChange, { passive: true })
+  document.addEventListener("pointerlockerror", () => console.error("Could not lock pointer"), { passive: true })
+  document.getElementById("FULLSCREEN").addEventListener("click", fullscreen, { passive: true })
+
   canvas = document.querySelector('canvas')
   context = canvas.getContext('2d')
   blurDiv = document.getElementById("blur")
@@ -63,9 +72,6 @@ function initialise() {
   loop()
 }
 
-document.addEventListener('pointerlockchange', lockChange, { passive: true })
-document.addEventListener("pointerlockerror", () => console.error("Could not lock pointer"), { passive: true })
-document.getElementById("FULLSCREEN").addEventListener("click", () => { canvas.requestFullscreen() }, { passive: true })
 
 window.addEventListener('resize', resizeCanvas, { passive: true })
 window.addEventListener('load', initialise, { passive: false })
