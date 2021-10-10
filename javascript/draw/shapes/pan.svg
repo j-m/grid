@@ -1,0 +1,22 @@
+<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+  <path stroke="black" stroke-width="3" fill="white" stroke-linejoin="round" d="
+  M 20 37
+  l 0 -25
+  a 4 4 0 0 1 8 0 
+  l 0 15 
+  l 0 -20 
+  a 4 4 0 0 1 8 0  
+  l 0 20 
+  l 0 -18 
+  a 4 4 0 0 1 8 0  
+  l 0 20 
+  l 0 -10
+  a 4 4 0 0 1 8 0  
+  l 0 20 
+  c 0 15 -15 15 -15 15
+  l -10 0 
+  s -10 0 -15 -10
+  l -4 -12
+  a 4 4 0 0 1 8 -4
+  z  " />
+</svg>
