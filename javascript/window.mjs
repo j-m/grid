@@ -14,7 +14,7 @@ export let canvas = {
 }
 export let context
 
-let blurDiv = undefined
+let blurDiv
 
 function draw() {
   context.clearRect(0, 0, canvas.width, canvas.height)

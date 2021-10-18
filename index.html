@@ -1,52 +1,57 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <link rel="stylesheet" href="index.css" type="text/css"/>
-    <script src="javascript/window.mjs" type="module"></script>
-  </head>
-  <body>
-    <div id="blur"></div>
-    <canvas width="1200" height="800">You need to enable JavaScript</canvas>
-    <div id="sidebar">
-      <fieldset id="settings">
-        <h2>Settings</h2>
-        <label for="INVERT_SCROLL"><input type="checkbox" id="INVERT_SCROLL" name="INVERT_SCROLL"/>Invert scroll</label>
-        <label for="SHOW_CENTRE"><input type="checkbox" id="SHOW_CENTRE" name="SHOW_CENTRE"/>Show map centre</label>
-        <label for="OVERWRITE_NODES"><input type="checkbox" id="OVERWRITE_NODES" name="OVERWRITE_NODES"/>Overwrite nodes</label>
-        <label for="EDGE_PAN"><input type="checkbox" id="EDGE_PAN" name="EDGE_PAN"/>Pan on mouse edge</label>
-      </fieldset>
-      <hr/>
-      <fieldset id="style">
-        <h2>Style</h2>
 
-        <label for="GRID">Grid 
-          <select name="GRID" id="GRID">
-            <option value="square">Square</option>
-            <option value="triangle">Triangle</option>
-            <option value="hexagon">Hexagon</option>
-          </select>
-        </label>
+<head>
+  <link rel="stylesheet" href="index.css" type="text/css" />
+  <script src="javascript/window.mjs" type="module"></script>
+</head>
 
-        <label for="SHAPE">Shape 
-          <select name="SHAPE" id="SHAPE">
-            <option value="square">Square</option>
-            <option value="circle">Circle</option>
-            <option value="triangle">Triangle</option>
-            <option value="hexagon">Hexagon</option>
-          </select>
-        </label>
-        <label for="FILL">Fill <input type="color" id="FILL" name="FILL" value="#000000"></label>
-        <label for="SIZE">Size <input type="range" id="SIZE" name="SIZE" min="1" max="100" value="100"></label>
-        <label for="OUTLINE">Outline <input type="color" id="OUTLINE" name="OUTLINE" value="#000000"></label>
-        <label for="THICKNESS">Thickness <input type="range" id="THICKNESS" name="THICKNESS" min="0" max="50" value="0"></label>
-      </fieldset>
-      <hr/>
-      <fieldset id="actions">
-        <h2>Actions</h2>
-        <button id="FULLSCREEN">Fullscreen</button>
-        <button id="CONVERT_ALL">Style all nodes</button>
-        <button id="CLEAR_ALL">Clear all nodes</button>
-      </fieldset> 
-    </div>
-  </body>
+<body>
+  <div id="blur"></div>
+  <canvas width="1200" height="800">You need to enable JavaScript</canvas>
+  <div id="sidebar">
+    <fieldset id="settings">
+      <h2>Settings</h2>
+      <label for="INVERT_SCROLL"><input type="checkbox" id="INVERT_SCROLL" name="INVERT_SCROLL" />Invert scroll</label>
+      <label for="SHOW_CENTRE"><input type="checkbox" id="SHOW_CENTRE" name="SHOW_CENTRE" />Show map centre</label>
+      <label for="OVERWRITE_NODES"><input type="checkbox" id="OVERWRITE_NODES" name="OVERWRITE_NODES" />Overwrite
+        nodes</label>
+      <label for="EDGE_PAN"><input type="checkbox" id="EDGE_PAN" name="EDGE_PAN" />Pan on mouse edge</label>
+    </fieldset>
+    <hr />
+    <fieldset id="style">
+      <h2>Style</h2>
+
+      <label for="GRID">Grid
+        <select name="GRID" id="GRID">
+          <option value="square">Square</option>
+          <option value="triangle">Triangle</option>
+          <option value="hexagon">Hexagon</option>
+        </select>
+      </label>
+
+      <label for="SHAPE">Shape
+        <select name="SHAPE" id="SHAPE">
+          <option value="square">Square</option>
+          <option value="circle">Circle</option>
+          <option value="triangle">Triangle</option>
+          <option value="hexagon">Hexagon</option>
+        </select>
+      </label>
+      <label for="FILL">Fill <input type="color" id="FILL" name="FILL" value="#000000"></label>
+      <label for="SIZE">Size <input type="range" id="SIZE" name="SIZE" min="1" max="100" value="100"></label>
+      <label for="OUTLINE">Outline <input type="color" id="OUTLINE" name="OUTLINE" value="#000000"></label>
+      <label for="THICKNESS">Thickness <input type="range" id="THICKNESS" name="THICKNESS" min="0" max="50"
+          value="0"></label>
+    </fieldset>
+    <hr />
+    <fieldset id="actions">
+      <h2>Actions</h2>
+      <button id="FULLSCREEN">Fullscreen</button>
+      <button id="CONVERT_ALL">Style all nodes</button>
+      <button id="CLEAR_ALL">Clear all nodes</button>
+    </fieldset>
+  </div>
+</body>
+
 </html>
