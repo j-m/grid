@@ -1,6 +1,7 @@
 import { x as mouseX, y as mouseY } from "../events/mouse.mjs"
 import { subscribe, EVENT } from "../events/manager.mjs"
 import { ZOOM_STEP } from "../settings/application.mjs"
+import userSettings from "../settings/user.mjs"
 import { draw as gridDraw } from "./grid.mjs"
 import { draw as nodesDraw } from "./nodes.mjs"
 import { draw as mouseDraw } from "./mouse.mjs"
@@ -12,12 +13,29 @@ export let zoom = 1
 export const ZOOM_MIN = 0.1
 export const ZOOM_MAX = 4
 
+const EDGE_PAN_SPEED = 5
+
 export function draw() {
   gridDraw()
   nodesDraw()
   mouseDraw()
   tipsDraw()
   menuDraw()
+
+  if (userSettings.edgePan === true && dragging === false) {
+    if (mouseX === 0) {
+      canvas.centre.x += EDGE_PAN_SPEED
+    }
+    if (mouseX === canvas.width) {
+      canvas.centre.x -= EDGE_PAN_SPEED
+    }
+    if (mouseY === 0) {
+      canvas.centre.y += EDGE_PAN_SPEED
+    }
+    if (mouseY === canvas.height) {
+      canvas.centre.y -= EDGE_PAN_SPEED
+    }
+  }
 }
 
 export function zoomIn() {
