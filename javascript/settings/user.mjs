@@ -7,7 +7,7 @@ const defaultUserSettings = {
   edgePan: false
 }
 
-const userSettings = retrieve("user", defaultUserSettings)
+const userSettings = { ...defaultUserSettings, ...retrieve("user") }
 export default userSettings
 function change(key, value) {
   userSettings[key] = value
