@@ -1,5 +1,6 @@
 import * as world from "./draw/world.mjs"
 import * as mouse from "./events/mouse.mjs"
+import userSettings from "./settings/user.mjs"
 
 const INITIAL_CANVAS_WIDTH = 1200
 const INITIAL_CANVAS_HEIGHT = 1200
@@ -42,7 +43,9 @@ function onLockChange() {
   if (isCanvasFocused) {
     blurDiv.classList.add('hidden')
   } else {
-    blurDiv.classList.remove('hidden')
+    if (userSettings.blur) {
+      blurDiv.classList.remove('hidden')
+    }
   }
   mouse.lockChange()
   draw()
