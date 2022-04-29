@@ -8,31 +8,29 @@ export let step = { w: GRID_STEP, h: GRID_STEP }
 const ROOT_3 = Math.sqrt(3)
 const baseHeightRatio = (2 / ROOT_3) / 2
 
-function drawBackwardSlantedLines(spacing, offsetX = 0) {
+function drawBackwardSlantedLines(spacing, offsetX = 0, offsetY = 0) {
   const equilateralTriangleBase = canvas.height / ROOT_3 / 2
-  const offset = (canvas.centre.y - canvas.height / 2) * baseHeightRatio % spacing
   for (let x = canvas.centre.x; x > -equilateralTriangleBase; x -= spacing) {
-    context.moveTo(x - equilateralTriangleBase - offset + offsetX, 0)
-    context.lineTo(x + equilateralTriangleBase - offset + offsetX, canvas.height)
+    context.moveTo(x - equilateralTriangleBase + offsetX, offsetY)
+    context.lineTo(x + equilateralTriangleBase + offsetX, canvas.height + offsetY)
   }
 
   for (let x = canvas.centre.x + spacing; x < canvas.width + equilateralTriangleBase; x += spacing) {
-    context.moveTo(x - equilateralTriangleBase - offset + offsetX, 0)
-    context.lineTo(x + equilateralTriangleBase - offset + offsetX, canvas.height)
+    context.moveTo(x - equilateralTriangleBase + offsetX, offsetY)
+    context.lineTo(x + equilateralTriangleBase + offsetX, canvas.height + offsetY)
   }
 }
 
-function drawForwardSlantedLines(spacing, offsetX = 0) {
+function drawForwardSlantedLines(spacing, offsetX = 0, offsetY = 0) {
   const equilateralTriangleBase = canvas.height / ROOT_3 / 2
-  const offset = (canvas.centre.y - canvas.height / 2) * baseHeightRatio % spacing
   for (let x = canvas.centre.x; x > -equilateralTriangleBase; x -= spacing) {
-    context.moveTo(x + equilateralTriangleBase + offset + offsetX, 0)
-    context.lineTo(x - equilateralTriangleBase + offset + offsetX, canvas.height)
+    context.moveTo(x + equilateralTriangleBase + offsetX, offsetY)
+    context.lineTo(x - equilateralTriangleBase + offsetX, canvas.height + offsetY)
   }
 
   for (let x = canvas.centre.x + spacing; x < canvas.width + equilateralTriangleBase; x += spacing) {
-    context.moveTo(x + equilateralTriangleBase + offset + offsetX, 0)
-    context.lineTo(x - equilateralTriangleBase + offset + offsetX, canvas.height)
+    context.moveTo(x + equilateralTriangleBase + offsetX, offsetY)
+    context.lineTo(x - equilateralTriangleBase + offsetX, canvas.height + offsetY)
   }
 }
 
@@ -64,50 +62,69 @@ function drawTriangularLines() {
 
   context.beginPath()
   drawHorizontalLines(step.h * zoom)
-  drawBackwardSlantedLines(step.w * zoom)
-  drawForwardSlantedLines(step.w * zoom)
+  const spacing = step.w * zoom
+  const offset = (canvas.centre.y - canvas.height / 2) * baseHeightRatio % spacing
+  drawBackwardSlantedLines(spacing, -offset)
+  drawForwardSlantedLines(spacing, offset)
   context.stroke()
 }
 
 function drawHexagonalLine() {
-  const sideLength = GRID_STEP / 2 * zoom
+  const sideLength = (GRID_STEP / 2) * zoom
   step.w = sideLength * 2
   step.h = sideLength * ROOT_3
 
-  context.strokeStyle = 'blue'
+  const horizontalLineOffsetX = canvas.centre.x % (sideLength * 3)
+
+  const offsetX = -sideLength / 2
+  const offsetY = (canvas.centre.y - canvas.height / 2) % step.h
+
   context.beginPath()
   context.setLineDash([sideLength, sideLength * 2])
-  context.lineDashOffset = sideLength / 2
+  context.lineDashOffset = sideLength / 2 - horizontalLineOffsetX
   drawHorizontalLines(step.h)
   context.stroke()
 
-  context.strokeStyle = 'orange'
   context.beginPath()
   context.setLineDash([sideLength, sideLength * 2])
-  context.lineDashOffset = sideLength * 2
+  context.lineDashOffset = sideLength * 2 - horizontalLineOffsetX
   drawHorizontalLines(step.h, step.h / 2)
   context.stroke()
 
-  context.strokeStyle = 'red'
-  context.beginPath()
-  context.setLineDash([sideLength, sideLength * 2])
-  context.lineDashOffset = 0
-  drawBackwardSlantedLines(sideLength * 3, 0)
-  context.stroke()
-
-  context.strokeStyle = 'purple'
   context.beginPath()
   context.setLineDash([sideLength, sideLength * 2])
   context.lineDashOffset = sideLength
-  drawBackwardSlantedLines(sideLength * 3, sideLength * 2)
+  drawBackwardSlantedLines(sideLength * 3, offsetX, offsetY)
   context.stroke()
 
+  context.beginPath()
+  context.setLineDash([sideLength, sideLength * 2])
+  context.lineDashOffset = 0
+  drawBackwardSlantedLines(sideLength * 3, sideLength + offsetX, offsetY)
+  context.stroke()
 
-  context.strokeStyle = 'green'
   context.beginPath()
   context.setLineDash([sideLength, sideLength * 2])
   context.lineDashOffset = sideLength * 2
-  drawBackwardSlantedLines(sideLength * 3, sideLength * 4)
+  drawBackwardSlantedLines(sideLength * 3, sideLength * 2 + offsetX, offsetY)
+  context.stroke()
+
+  context.beginPath()
+  context.setLineDash([sideLength, sideLength * 2])
+  context.lineDashOffset = sideLength
+  drawForwardSlantedLines(sideLength * 3, -offsetX, offsetY)
+  context.stroke()
+
+  context.beginPath()
+  context.setLineDash([sideLength, sideLength * 2])
+  context.lineDashOffset = 0
+  drawForwardSlantedLines(sideLength * 3, -(sideLength + offsetX), offsetY)
+  context.stroke()
+
+  context.beginPath()
+  context.setLineDash([sideLength, sideLength * 2])
+  context.lineDashOffset = sideLength * 2
+  drawForwardSlantedLines(sideLength * 3, -(sideLength * 2 + offsetX), offsetY)
   context.stroke()
 }
 
