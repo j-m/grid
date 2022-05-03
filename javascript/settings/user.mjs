@@ -21,6 +21,10 @@ const overwriteNodes = document.getElementById("OVERWRITE_NODES")
 const edgePan = document.getElementById("EDGE_PAN")
 const blur = document.getElementById("BLUR")
 
+if (userSettings.blur === false) {
+  document.getElementById("blur").classList.add('hidden')
+}
+
 invertScroll.checked = userSettings.invertScroll
 showCentre.checked = userSettings.showCentre
 overwriteNodes.checked = userSettings.overwriteNodes
