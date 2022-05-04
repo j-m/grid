@@ -122,7 +122,7 @@ function drawTriangularLines() {
   drawForwardSlantedLines(equilateralTriangleBase, spacing, offsetX)
 }
 
-function drawHexagonalLine() {
+function drawHexagonalLines() {
   const equilateralTriangleBase = canvas.height / ROOT_3 / 2
   const sideLength = (GRID_STEP / 2) * zoom
   step.w = sideLength * 2
@@ -178,7 +178,7 @@ function drawLines() {
       drawTriangularLines()
       break
     case "hexagon":
-      drawHexagonalLine()
+      drawHexagonalLines()
       break
     case "square":
     default:
