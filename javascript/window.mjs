@@ -25,7 +25,7 @@ function draw() {
 function loop() {
   requestAnimationFrame(loop)
   if (!canvas || !context) { return }
-  if (!isCanvasFocused) { return }
+  if (!userSettings.renderOnBlur && !isCanvasFocused) { return }
   draw()
 }
 
