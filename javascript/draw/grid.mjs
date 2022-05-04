@@ -6,9 +6,8 @@ import styleSettings from "../settings/style.mjs"
 export let step = { w: GRID_STEP, h: GRID_STEP }
 
 const ROOT_3 = Math.sqrt(3)
-const baseHeightRatio = (2 / ROOT_3) / 2
 
-function drawBackwardSlantedLines(base, spacing, offsetX = 0, offsetY = 0, lineDash = [], lineDashOffset = 0, strokeStyle = undefined) {
+function drawBackwardSlantedLines(heightToBaseRatio, spacing, offsetX = 0, offsetY = 0, lineDash = [], lineDashOffset = 0, strokeStyle = undefined) {
   context.beginPath()
   if (lineDash) {
     context.setLineDash(lineDash)
@@ -17,13 +16,15 @@ function drawBackwardSlantedLines(base, spacing, offsetX = 0, offsetY = 0, lineD
   if (strokeStyle) {
     context.strokeStyle = strokeStyle
   }
+  const base = canvas.height / heightToBaseRatio / 2
+  const offsetYBase = offsetY / heightToBaseRatio
   for (let x = canvas.centre.x; x > -base; x -= spacing) {
     context.moveTo(x + offsetX, canvas.height / 2 + offsetY)
-    context.lineTo(x - base + offsetX, offsetY)
+    context.lineTo(x - base + offsetX - offsetYBase, 0)
   }
   for (let x = canvas.centre.x + spacing; x < canvas.width + base; x += spacing) {
     context.moveTo(x + offsetX, canvas.height / 2 + offsetY)
-    context.lineTo(x - base + offsetX, offsetY)
+    context.lineTo(x - base + offsetX - offsetYBase, 0)
   }
   context.stroke()
 
@@ -37,16 +38,16 @@ function drawBackwardSlantedLines(base, spacing, offsetX = 0, offsetY = 0, lineD
   }
   for (let x = canvas.centre.x; x > -base; x -= spacing) {
     context.moveTo(x + offsetX, canvas.height / 2 + offsetY)
-    context.lineTo(x + base + offsetX, canvas.height + offsetY)
+    context.lineTo(x + base + offsetX - offsetYBase, canvas.height)
   }
   for (let x = canvas.centre.x + spacing; x < canvas.width + base; x += spacing) {
     context.moveTo(x + offsetX, canvas.height / 2 + offsetY)
-    context.lineTo(x + base + offsetX, canvas.height + offsetY)
+    context.lineTo(x + base + offsetX - offsetYBase, canvas.height)
   }
   context.stroke()
 }
 
-function drawForwardSlantedLines(base, spacing, offsetX = 0, offsetY = 0, lineDash = [], lineDashOffset = 0, strokeStyle = undefined) {
+function drawForwardSlantedLines(heightToBaseRatio, spacing, offsetX = 0, offsetY = 0, lineDash = [], lineDashOffset = 0, strokeStyle = undefined) {
   context.beginPath()
   if (lineDash) {
     context.setLineDash(lineDash)
@@ -55,13 +56,15 @@ function drawForwardSlantedLines(base, spacing, offsetX = 0, offsetY = 0, lineDa
   if (strokeStyle) {
     context.strokeStyle = strokeStyle
   }
+  const base = canvas.height / heightToBaseRatio / 2
+  const offsetYBase = offsetY / heightToBaseRatio
   for (let x = canvas.centre.x; x > -base; x -= spacing) {
     context.moveTo(x + offsetX, canvas.height / 2 + offsetY)
-    context.lineTo(x + base + offsetX, offsetY)
+    context.lineTo(x + base + offsetX + offsetYBase, 0)
   }
   for (let x = canvas.centre.x + spacing; x < canvas.width + base; x += spacing) {
     context.moveTo(x + offsetX, canvas.height / 2 + offsetY)
-    context.lineTo(x + base + offsetX, offsetY)
+    context.lineTo(x + base + offsetX + offsetYBase, 0)
   }
   context.stroke()
 
@@ -75,12 +78,12 @@ function drawForwardSlantedLines(base, spacing, offsetX = 0, offsetY = 0, lineDa
   }
   for (let x = canvas.centre.x; x > -base; x -= spacing) {
     context.moveTo(x + offsetX, canvas.height / 2 + offsetY)
-    context.lineTo(x - base + offsetX, canvas.height + offsetY)
+    context.lineTo(x - base + offsetX + offsetYBase, canvas.height)
   }
 
   for (let x = canvas.centre.x + spacing; x < canvas.width + base; x += spacing) {
     context.moveTo(x + offsetX, canvas.height / 2 + offsetY)
-    context.lineTo(x - base + offsetX, canvas.height + offsetY)
+    context.lineTo(x - base + offsetX + offsetYBase, canvas.height)
   }
   context.stroke()
 }
@@ -112,18 +115,17 @@ function drawHorizontalLines(spacing, offsetY = 0) {
 }
 
 function drawTriangularLines() {
-  const equilateralTriangleBase = canvas.height / ROOT_3 / 2
+  const baseHeightRatio = (2 / ROOT_3) / 2
   step.h = GRID_STEP * ROOT_3 / 2
 
   drawHorizontalLines(step.h * zoom)
   const spacing = step.w * zoom
   const offsetX = (canvas.centre.y - canvas.height / 2) * baseHeightRatio % spacing
-  drawBackwardSlantedLines(equilateralTriangleBase, spacing, -offsetX)
-  drawForwardSlantedLines(equilateralTriangleBase, spacing, offsetX)
+  drawBackwardSlantedLines(ROOT_3, spacing, -offsetX)
+  drawForwardSlantedLines(ROOT_3, spacing, offsetX)
 }
 
 function drawHexagonalLines() {
-  const equilateralTriangleBase = canvas.height / ROOT_3 / 2
   const sideLength = (GRID_STEP / 2) * zoom
   step.w = sideLength * 2
   step.h = sideLength * ROOT_3
@@ -146,13 +148,13 @@ function drawHexagonalLines() {
   drawHorizontalLines(step.h, step.h / 2)
   context.stroke()
 
-  drawBackwardSlantedLines(equilateralTriangleBase, sideLength * 3, offsetX, offsetY, lineDash, sideLength)
-  drawBackwardSlantedLines(equilateralTriangleBase, sideLength * 3, sideLength + offsetX, offsetY, lineDash, 0)
-  drawBackwardSlantedLines(equilateralTriangleBase, sideLength * 3, sideLength * 2 + offsetX, offsetY, lineDash, sideLength * 2)
+  drawBackwardSlantedLines(ROOT_3, sideLength * 3, offsetX, offsetY, lineDash, sideLength)
+  drawBackwardSlantedLines(ROOT_3, sideLength * 3, sideLength + offsetX, offsetY, lineDash, 0)
+  drawBackwardSlantedLines(ROOT_3, sideLength * 3, sideLength * 2 + offsetX, offsetY, lineDash, sideLength * 2)
 
-  drawForwardSlantedLines(equilateralTriangleBase, sideLength * 3, -offsetX, offsetY, lineDash, sideLength)
-  drawForwardSlantedLines(equilateralTriangleBase, sideLength * 3, -(sideLength + offsetX), offsetY, lineDash, 0)
-  drawForwardSlantedLines(equilateralTriangleBase, sideLength * 3, -(sideLength * 2 + offsetX), offsetY, lineDash, sideLength * 2)
+  drawForwardSlantedLines(ROOT_3, sideLength * 3, -offsetX, offsetY, lineDash, sideLength)
+  drawForwardSlantedLines(ROOT_3, sideLength * 3, -(sideLength + offsetX), offsetY, lineDash, 0)
+  drawForwardSlantedLines(ROOT_3, sideLength * 3, -(sideLength * 2 + offsetX), offsetY, lineDash, sideLength * 2)
 }
 
 function drawSquareLines() {
