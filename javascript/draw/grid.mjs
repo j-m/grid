@@ -100,13 +100,13 @@ function drawVerticalLines(spacing) {
 
 function drawHorizontalLines(spacing, offsetY = 0) {
   context.beginPath()
-  for (let y = canvas.centre.y; y > 0; y -= spacing) {
-    context.moveTo(0, y + offsetY)
-    context.lineTo(canvas.width, y + offsetY)
+  for (let y = canvas.centre.y + offsetY; y > 0; y -= spacing) {
+    context.moveTo(0, y)
+    context.lineTo(canvas.width, y)
   }
-  for (let y = canvas.centre.y + spacing; y < canvas.height; y += spacing) {
-    context.moveTo(0, y + offsetY)
-    context.lineTo(canvas.width, y + offsetY)
+  for (let y = canvas.centre.y + spacing + offsetY; y < canvas.height; y += spacing) {
+    context.moveTo(0, y)
+    context.lineTo(canvas.width, y)
   }
   context.stroke()
 }
