@@ -1,12 +1,12 @@
-import Node, { currentStyle } from "../classes/Node.mjs"
+import Node, { currentStyle, getNodePositionFromMouse } from "../classes/Node.mjs"
 import userSettings from "../settings/user.mjs"
-import styleSettings from "../settings/style.mjs"
-import { mouse, zoom } from "./world.mjs"
+import { zoom } from "./world.mjs"
 import { step } from "./grid.mjs"
 import { subscribe, EVENT } from "../events/manager.mjs"
 import { canvas } from "../window.mjs"
 
 let nodes = {}
+export let drawing = false
 
 export function draw() {
   const offset = step.w / 2 * zoom
@@ -19,14 +19,6 @@ export function draw() {
     }
   })
 }
-
-function getNodePositionFromMouse() {
-  const x = Math.floor(mouse.x * (styleSettings.grid === "triangle" ? 2 : 1) / step.w)
-  const y = Math.floor(mouse.y / step.h)
-  return [x, y]
-}
-
-export let drawing = false
 
 function createNode() {
   if (!drawing) {

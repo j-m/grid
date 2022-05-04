@@ -1,7 +1,19 @@
 import styleSettings from "../settings/style.mjs"
 import { canvas, context } from "../window.mjs"
-import { zoom } from "../draw/world.mjs"
+import { mouse, zoom } from "../draw/world.mjs"
 import { step } from "../draw/grid.mjs"
+
+export function getNodePositionFromMouse() {
+  let x = Math.floor(mouse.x / step.w)
+  let y = Math.floor(mouse.y / step.h)
+
+  switch (styleSettings.grid) {
+    case "triangle":
+      x = Math.floor(mouse.x * 2 / step.w)
+  }
+
+  return [x, y]
+}
 
 export function currentStyle() {
   return {
