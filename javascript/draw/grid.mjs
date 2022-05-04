@@ -6,37 +6,90 @@ import styleSettings from "../settings/style.mjs"
 export let step = { w: GRID_STEP, h: GRID_STEP }
 
 const ROOT_3 = Math.sqrt(3)
-const baseHeightRatio = 2 / ROOT_3 / 2
 
-function drawBackwardSlantedLines(spacing) {
-  const equilateralTriangleBase = canvas.height / ROOT_3 / 2
-  const offset = (canvas.centre.y - canvas.height / 2) * baseHeightRatio % spacing
-  for (let x = canvas.centre.x; x > -equilateralTriangleBase; x -= spacing) {
-    context.moveTo(x - equilateralTriangleBase - offset, 0)
-    context.lineTo(x + equilateralTriangleBase - offset, canvas.height)
+function drawBackwardSlantedLines(heightToBaseRatio, spacing, offsetX = 0, offsetY = 0, lineDash = [], lineDashOffset = 0, strokeStyle = undefined) {
+  context.beginPath()
+  if (lineDash) {
+    context.setLineDash(lineDash)
+    context.lineDashOffset = lineDash[0] - lineDashOffset
   }
+  if (strokeStyle) {
+    context.strokeStyle = strokeStyle
+  }
+  const base = canvas.height / heightToBaseRatio / 2
+  const offsetYBase = offsetY / heightToBaseRatio
+  for (let x = canvas.centre.x; x > -base; x -= spacing) {
+    context.moveTo(x + offsetX, canvas.height / 2 + offsetY)
+    context.lineTo(x - base + offsetX - offsetYBase, 0)
+  }
+  for (let x = canvas.centre.x + spacing; x < canvas.width + base; x += spacing) {
+    context.moveTo(x + offsetX, canvas.height / 2 + offsetY)
+    context.lineTo(x - base + offsetX - offsetYBase, 0)
+  }
+  context.stroke()
 
-  for (let x = canvas.centre.x + spacing; x < canvas.width + equilateralTriangleBase; x += spacing) {
-    context.moveTo(x - equilateralTriangleBase - offset, 0)
-    context.lineTo(x + equilateralTriangleBase - offset, canvas.height)
+  context.beginPath()
+  if (lineDash) {
+    context.setLineDash(lineDash)
+    context.lineDashOffset = lineDashOffset
   }
+  if (strokeStyle) {
+    context.strokeStyle = strokeStyle
+  }
+  for (let x = canvas.centre.x; x > -base; x -= spacing) {
+    context.moveTo(x + offsetX, canvas.height / 2 + offsetY)
+    context.lineTo(x + base + offsetX - offsetYBase, canvas.height)
+  }
+  for (let x = canvas.centre.x + spacing; x < canvas.width + base; x += spacing) {
+    context.moveTo(x + offsetX, canvas.height / 2 + offsetY)
+    context.lineTo(x + base + offsetX - offsetYBase, canvas.height)
+  }
+  context.stroke()
 }
 
-function drawForwardSlantedLines(spacing) {
-  const equilateralTriangleBase = canvas.height / ROOT_3 / 2
-  const offset = (canvas.centre.y - canvas.height / 2) * baseHeightRatio % spacing
-  for (let x = canvas.centre.x; x > -equilateralTriangleBase; x -= spacing) {
-    context.moveTo(x + equilateralTriangleBase + offset, 0)
-    context.lineTo(x - equilateralTriangleBase + offset, canvas.height)
+function drawForwardSlantedLines(heightToBaseRatio, spacing, offsetX = 0, offsetY = 0, lineDash = [], lineDashOffset = 0, strokeStyle = undefined) {
+  context.beginPath()
+  if (lineDash) {
+    context.setLineDash(lineDash)
+    context.lineDashOffset = lineDash[0] - lineDashOffset
+  }
+  if (strokeStyle) {
+    context.strokeStyle = strokeStyle
+  }
+  const base = canvas.height / heightToBaseRatio / 2
+  const offsetYBase = offsetY / heightToBaseRatio
+  for (let x = canvas.centre.x; x > -base; x -= spacing) {
+    context.moveTo(x + offsetX, canvas.height / 2 + offsetY)
+    context.lineTo(x + base + offsetX + offsetYBase, 0)
+  }
+  for (let x = canvas.centre.x + spacing; x < canvas.width + base; x += spacing) {
+    context.moveTo(x + offsetX, canvas.height / 2 + offsetY)
+    context.lineTo(x + base + offsetX + offsetYBase, 0)
+  }
+  context.stroke()
+
+  context.beginPath()
+  if (lineDash) {
+    context.setLineDash(lineDash)
+    context.lineDashOffset = lineDashOffset
+  }
+  if (strokeStyle) {
+    context.strokeStyle = strokeStyle
+  }
+  for (let x = canvas.centre.x; x > -base; x -= spacing) {
+    context.moveTo(x + offsetX, canvas.height / 2 + offsetY)
+    context.lineTo(x - base + offsetX + offsetYBase, canvas.height)
   }
 
-  for (let x = canvas.centre.x + spacing; x < canvas.width + equilateralTriangleBase; x += spacing) {
-    context.moveTo(x + equilateralTriangleBase + offset, 0)
-    context.lineTo(x - equilateralTriangleBase + offset, canvas.height)
+  for (let x = canvas.centre.x + spacing; x < canvas.width + base; x += spacing) {
+    context.moveTo(x + offsetX, canvas.height / 2 + offsetY)
+    context.lineTo(x - base + offsetX + offsetYBase, canvas.height)
   }
+  context.stroke()
 }
 
 function drawVerticalLines(spacing) {
+  context.beginPath()
   for (let x = canvas.centre.x; x > 0; x -= spacing) {
     context.moveTo(x, 0)
     context.lineTo(x, canvas.height)
@@ -45,59 +98,66 @@ function drawVerticalLines(spacing) {
     context.moveTo(x, 0)
     context.lineTo(x, canvas.height)
   }
+  context.stroke()
 }
 
-function drawHorizontalLines(spacing, offset = 0) {
-  for (let y = canvas.centre.y; y > 0; y -= spacing) {
-    context.moveTo(0, y + offset)
-    context.lineTo(canvas.width, y + offset)
+function drawHorizontalLines(spacing, offsetY = 0) {
+  context.beginPath()
+  for (let y = canvas.centre.y + offsetY; y > 0; y -= spacing) {
+    context.moveTo(0, y)
+    context.lineTo(canvas.width, y)
   }
-  for (let y = canvas.centre.y + spacing; y < canvas.height; y += spacing) {
-    context.moveTo(0, y + offset)
-    context.lineTo(canvas.width, y + offset)
+  for (let y = canvas.centre.y + spacing + offsetY; y < canvas.height; y += spacing) {
+    context.moveTo(0, y)
+    context.lineTo(canvas.width, y)
   }
+  context.stroke()
 }
-
 
 function drawTriangularLines() {
+  const baseHeightRatio = (2 / ROOT_3) / 2
   step.h = GRID_STEP * ROOT_3 / 2
 
-  context.beginPath()
   drawHorizontalLines(step.h * zoom)
-  drawBackwardSlantedLines(step.w * zoom)
-  drawForwardSlantedLines(step.w * zoom)
-  context.stroke()
+  const spacing = step.w * zoom
+  const offsetX = (canvas.centre.y - canvas.height / 2) * baseHeightRatio % spacing
+  drawBackwardSlantedLines(ROOT_3, spacing, -offsetX)
+  drawForwardSlantedLines(ROOT_3, spacing, offsetX)
 }
 
-function drawHexagonalLine() {
-  step.h = GRID_STEP * ROOT_3 / 2
+function drawHexagonalLines() {
+  const sideLength = (GRID_STEP / 2) * zoom
+  step.w = sideLength * 2
+  step.h = sideLength * ROOT_3
+
+  const horizontalLineOffsetX = canvas.centre.x % (sideLength * 3)
+
+  const offsetX = -sideLength / 2
+  const offsetY = (canvas.centre.y - canvas.height / 2) % step.h
+  const lineDash = [sideLength, sideLength * 2]
 
   context.beginPath()
-  context.setLineDash([step.w * zoom, step.w * zoom])
-  context.lineDashOffset = 0
-  drawHorizontalLines(step.h * zoom)
+  context.setLineDash(lineDash)
+  context.lineDashOffset = sideLength / 2 - horizontalLineOffsetX
+  drawHorizontalLines(step.h)
   context.stroke()
 
   context.beginPath()
-  context.lineDashOffset = step.w * zoom
-  drawHorizontalLines(step.h * zoom, step.h / 2 * zoom)
+  context.setLineDash(lineDash)
+  context.lineDashOffset = sideLength * 2 - horizontalLineOffsetX
+  drawHorizontalLines(step.h, step.h / 2)
   context.stroke()
 
-  context.beginPath()
-  context.lineDashOffset = 10
-  context.lineDashOffset = step.w * zoom / 2
-  drawBackwardSlantedLines(step.w * zoom)
-  context.stroke()
+  drawBackwardSlantedLines(ROOT_3, sideLength * 3, offsetX, offsetY, lineDash, sideLength)
+  drawBackwardSlantedLines(ROOT_3, sideLength * 3, sideLength + offsetX, offsetY, lineDash, 0)
+  drawBackwardSlantedLines(ROOT_3, sideLength * 3, sideLength * 2 + offsetX, offsetY, lineDash, sideLength * 2)
 
-  context.beginPath()
-  context.lineDashOffset = step.w * zoom / 2
-  drawForwardSlantedLines(step.w * zoom)
-  context.stroke()
+  drawForwardSlantedLines(ROOT_3, sideLength * 3, -offsetX, offsetY, lineDash, sideLength)
+  drawForwardSlantedLines(ROOT_3, sideLength * 3, -(sideLength + offsetX), offsetY, lineDash, 0)
+  drawForwardSlantedLines(ROOT_3, sideLength * 3, -(sideLength * 2 + offsetX), offsetY, lineDash, sideLength * 2)
 }
 
 function drawSquareLines() {
-  step.h = GRID_STEP
-
   context.beginPath()
   drawVerticalLines(step.h * zoom)
   drawHorizontalLines(step.w * zoom)
@@ -105,6 +165,8 @@ function drawSquareLines() {
 }
 
 function resetStyle() {
+  step.w = GRID_STEP
+  step.h = GRID_STEP
   context.strokeStyle = 'lightgrey'
   context.lineWidth = '1'
   context.setLineDash([])
@@ -118,7 +180,7 @@ function drawLines() {
       drawTriangularLines()
       break
     case "hexagon":
-      drawHexagonalLine()
+      drawHexagonalLines()
       break
     case "square":
     default:

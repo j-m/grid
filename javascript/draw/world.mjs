@@ -10,8 +10,8 @@ import { draw as menuDraw } from "./menu.mjs"
 import { canvas } from "../window.mjs"
 
 export let zoom = 1
-export const ZOOM_MIN = 0.1
-export const ZOOM_MAX = 4
+export const ZOOM_MIN = 0.2
+export const ZOOM_MAX = 5
 
 const EDGE_PAN_SPEED = 5
 
