@@ -5,7 +5,7 @@ import styleSettings from "../settings/style.mjs"
 
 export let step = { w: GRID_STEP, h: GRID_STEP }
 
-const ROOT_3 = Math.sqrt(3)
+export const ROOT_3 = Math.sqrt(3)
 
 function drawBackwardSlantedLines(heightToBaseRatio, spacing, offsetX = 0, offsetY = 0, lineDash = [], lineDashOffset = 0, strokeStyle = undefined) {
   context.beginPath()
@@ -116,13 +116,13 @@ function drawHorizontalLines(spacing, offsetY = 0) {
 
 function drawTriangularLines() {
   const baseHeightRatio = (2 / ROOT_3) / 2
-  step.h = GRID_STEP * ROOT_3 / 2
+  step.h = GRID_STEP * ROOT_3 / 2 * zoom
+  step.w = GRID_STEP * zoom
 
-  drawHorizontalLines(step.h * zoom)
-  const spacing = step.w * zoom
-  const offsetX = (canvas.centre.y - canvas.height / 2) * baseHeightRatio % spacing
-  drawBackwardSlantedLines(ROOT_3, spacing, -offsetX)
-  drawForwardSlantedLines(ROOT_3, spacing, offsetX)
+  drawHorizontalLines(step.h)
+  const offsetX = (canvas.centre.y - canvas.height / 2) * baseHeightRatio % step.w
+  drawBackwardSlantedLines(ROOT_3, step.w, -offsetX)
+  drawForwardSlantedLines(ROOT_3, step.w, offsetX)
 }
 
 function drawHexagonalLines() {
@@ -158,15 +158,15 @@ function drawHexagonalLines() {
 }
 
 function drawSquareLines() {
+  step.w = GRID_STEP * zoom
+  step.h = GRID_STEP * zoom
   context.beginPath()
-  drawVerticalLines(step.h * zoom)
-  drawHorizontalLines(step.w * zoom)
+  drawVerticalLines(step.h)
+  drawHorizontalLines(step.w)
   context.stroke()
 }
 
 function resetStyle() {
-  step.w = GRID_STEP
-  step.h = GRID_STEP
   context.strokeStyle = 'lightgrey'
   context.lineWidth = '1'
   context.setLineDash([])
@@ -174,6 +174,8 @@ function resetStyle() {
 }
 
 function drawLines() {
+  step.w = GRID_STEP
+  step.h = GRID_STEP
   resetStyle()
   switch (styleSettings.grid) {
     case "triangle":

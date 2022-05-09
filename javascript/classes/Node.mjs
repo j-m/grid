@@ -3,17 +3,31 @@ import { canvas, context } from "../window.mjs"
 import { mouse, zoom } from "../draw/world.mjs"
 import { step } from "../draw/grid.mjs"
 
-export function getNodePositionFromMouse() {
-  let x = Math.floor(mouse.x / step.w)
-  let y = Math.floor(mouse.y / step.h)
-
-  switch (styleSettings.grid) {
-    case "triangle":
-      x = Math.floor(mouse.x * 2 / step.w)
-  }
-
-  return [x, y]
+const MULTIPLIERS = {
+  X: {
+    "triangle": 0.5,
+    "hexagon": 0.75,
+  },
+  Y: {
+    "triangle": 1,
+    "hexagon": 1,
+  },
+  W: {
+    "triangle": 0.5,
+    "square": 0.5,
+    "hexagon": 0.5,
+  },
+  H: {
+    "hexagon": 0.5,
+    "square": 0.5,
+    "triangle": 0.5,
+  },
 }
+
+export function getNodePositionFromMouse() {
+  return [Math.floor(mouse.x * zoom / (MULTIPLIERS.X[styleSettings.grid] || 1) / step.w), Math.floor(mouse.y * zoom / step.h)]
+}
+
 
 export function currentStyle() {
   return {
@@ -34,19 +48,18 @@ export default class Node {
 
   get absolute() {
     const minStep = step.w < step.h ? step.w : step.h
-    const borderWidth = this.style.thickness * minStep * zoom
+    const borderWidth = this.style.thickness * minStep
     return {
-      x: (this.x * step.w * (styleSettings.grid === "triangle" ? 0.5 : 1) + step.w * 0.5 * this.style.size) * zoom + canvas.centre.x - borderWidth / 2,
-      y: (this.y * step.h + step.h * 0.5 * this.style.size) * zoom + canvas.centre.y - borderWidth / 2,
-      w: this.style.size * zoom * step.w * 0.5 - borderWidth / 2,
-      h: this.style.size * zoom * step.h * 0.5 - borderWidth / 2
+      x: (this.x * step.w * (MULTIPLIERS.X[styleSettings.grid] || 1) + step.w * this.style.size * (MULTIPLIERS.W[styleSettings.grid] || 1)) + canvas.centre.x - borderWidth / 2,
+      y: (this.y * step.h * (MULTIPLIERS.Y[styleSettings.grid] || 1) + step.h * this.style.size * (MULTIPLIERS.H[styleSettings.grid] || 1)) + canvas.centre.y - borderWidth / 2,
+      w: this.style.size * (MULTIPLIERS.W[styleSettings.grid] || 1) * step.w - borderWidth / 2,
+      h: this.style.size * (MULTIPLIERS.H[styleSettings.grid] || 1) * step.h - borderWidth / 2,
+      borderWidth
     }
   }
 
   draw() {
-    let { x, y, w, h } = this.absolute
-    x += step.w / 2 * zoom - w
-    y += step.h / 2 * zoom - h
+    let { x, y, w, h, borderWidth } = this.absolute
     context.beginPath()
     switch (this.style.shape) {
       case "circle":
@@ -65,6 +78,8 @@ export default class Node {
         }
         break
       case "hexagon":
+        y -= Math.abs(this.x) % 2 ? h * 1 : 0
+        x -= w
         context.moveTo(x - w, y)
         context.lineTo(x - w / 2, y - h)
         context.lineTo(x + w / 2, y - h)
@@ -81,8 +96,6 @@ export default class Node {
     context.fillStyle = this.style.fill
     context.fill()
     if (this.style.thickness > 0) {
-      const minStep = step.w < step.h ? step.w : step.h
-      const borderWidth = this.style.thickness * minStep * zoom
       context.lineWidth = borderWidth
       context.strokeStyle = this.style.outline
       context.stroke()
