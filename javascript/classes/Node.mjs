@@ -100,6 +100,13 @@ export default class Node {
       context.strokeStyle = this.style.outline
       context.stroke()
     }
+
+    if (zoom > 1) {
+      context.fillStyle = "black"
+      context.textBaseline = "middle";
+      context.textAlign = "center";
+      context.fillText(this.x + "." + this.y, x, y)
+    }
   }
 
 }
